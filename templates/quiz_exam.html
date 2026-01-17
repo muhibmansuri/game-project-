@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Exam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding-top: 80px;
+            /* Space for fixed header */
+        }
+
+        /* Header / Timer Bar */
+        .info-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 5%;
+            box-sizing: border-box;
+            z-index: 100;
+            align-items: center;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #d9534f;
+            background: #fde8e7;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .student-info {
+            font-weight: 600;
+            color: #555;
+        }
+
+        /* Container */
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto 50px auto;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .q-num {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .q-text {
+            width: calc(100% - 40px);
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .option-label:hover {
+            background: #f8f9fa;
+        }
+
+        .option-label input {
+            margin-right: 15px;
+            accent-color: #667eea;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Ready Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            background: #28a745;
+            color: white;
+            font-size: 1.5rem;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+
+        /* Results */
+        .result-header {
+            text-align: center;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .score-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .correct-answer {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .wrong-answer {
+            color: #d9534f;
+            text-decoration: line-through;
+        }
+
+        .user-selection {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Ready Modal -->
+    <div id="readyModal" class="modal-overlay">
+        <div class="modal-content">
+            <h1>Welcome, {{ name }}!</h1>
+            <p>You are about to start the Quiz.</p>
+            <ul style="text-align:left; display:inline-block; color:#555;">
+                <li>Total Questions: <strong>50</strong></li>
+                <li>Time Limit: <strong>50 Minutes</strong></li>
+                <li>Topic: Python & General Tech</li>
+            </ul>
+            <br>
+            <p>Are you ready?</p>
+            <button class="btn-primary" onclick="startQuiz()">YES, Start Quiz</button>
+        </div>
+    </div>
+
+    <!-- Main Quiz Interface -->
+    <div id="quizInterface" style="display:none;">
+        <div class="info-bar">
+            <div class="student-info">Student: {{ name }} ({{ roll }})</div>
+            <div class="timer" id="timer">50:00</div>
+        </div>
+
+        <div class="container" id="questionsContainer">
+            <!-- Questions injected here -->
+        </div>
+
+        <div class="container">
+            <button class="btn-submit" onclick="submitQuiz()">Submit Exam</button>
+        </div>
+    </div>
+
+    <!-- Result Interface -->
+    <div id="resultInterface" style="display:none;" class="container">
+        <div class="result-header">
+            <h1>Exam Completed</h1>
+            <div class="score-display" id="finalScore">0 / 50</div>
+            <p id="gradeMessage"></p>
+            <button class="btn-primary" onclick="window.location.href='/quiz'">Exit / Logout</button>
+        </div>
+        <div id="reviewContainer"></div>
+    </div>
+
+    <script>
+        let questions = [];
+        let answers = {}; // { 1: "option", ... }
+        let timerInterval;
+        let timeLeft = 50 * 60; // 50 mins in seconds
+
+        async function startQuiz() {
+            document.getElementById('readyModal').style.display = 'none';
+            document.getElementById('quizInterface').style.display = 'block';
+
+            // Fetch questions
+            const response = await fetch('/api/quiz/data');
+            questions = await response.json();
+
+            renderQuestions();
+            startTimer();
+        }
+
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time is up! Submitting automatically.");
+                    submitQuiz(true);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            document.getElementById('timer').textContent = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            if (timeLeft < 300) { // Red alert last 5 mins
+                document.getElementById('timer').style.color = 'red';
+            }
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.innerHTML = `
+                    <div class="q-header">
+                        <div class="q-num">${index + 1}</div>
+                        <div class="q-text">${q.question}</div>
+                    </div>
+                    <ul class="options-list">
+                        ${q.options.map(opt => `
+                            <li class="option-item">
+                                <label class="option-label">
+                                    <input type="radio" name="q_${q.id}" value="${opt}" onchange="recordAnswer('${q.id}', '${opt}')">
+                                    <span>${opt}</span>
+                                </label>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function recordAnswer(qid, val) {
+            answers[qid] = val;
+        }
+
+        async function submitQuiz(auto = false) {
+            if (!auto && !confirm("Are you sure you want to finish the exam?")) return;
+
+            clearInterval(timerInterval);
+
+            // Show loading or disable button
+            const btn = document.querySelector('.btn-submit');
+            btn.textContent = "Submitting...";
+            btn.disabled = true;
+
+            try {
+                // Get info from the page context (we injected it via Jinja2 template earlier)
+                // But wait, the JS runs in browser. We need to grab the name/roll we rendered.
+                // We didn't render them into JS variables yet. Let's fix that below.
+                const studentName = "{{ name }}";
+                const studentRoll = "{{ roll }}";
+
+                const response = await fetch('/api/quiz/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        answers: answers,
+                        name: studentName,
+                        roll: studentRoll
+                    })
+                });
+                const result = await response.json();
+                showResults(result);
+            } catch (e) {
+                alert("Error submitting. Please try again.");
+                btn.disabled = false;
+                btn.textContent = "Submit Exam";
+            }
+        }
+
+        function showResults(data) {
+            document.getElementById('quizInterface').style.display = 'none';
+            document.getElementById('resultInterface').style.display = 'block';
+
+            document.getElementById('finalScore').textContent = `${data.score} / ${data.total}`;
+
+            const reviewDiv = document.getElementById('reviewContainer');
+            reviewDiv.innerHTML = '<h2>Detailed Review</h2>';
+
+            data.details.forEach((item, idx) => {
+                const isCorrect = item.is_correct;
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.style.borderLeft = isCorrect ? '5px solid #28a745' : '5px solid #d9534f';
+
+                card.innerHTML = `
+                    <p><strong>Q${idx + 1}: ${item.question}</strong></p>
+                    <p>Your Answer: <span class="${isCorrect ? 'correct-answer' : 'wrong-answer'}">${item.user_answer || "Not Answered"}</span></p>
+                    ${!isCorrect ? `<p>Correct Answer: <span class="correct-answer">${item.correct_answer}</span></p>` : ''}
+                `;
+                reviewDiv.appendChild(card);
+            });
+        }
+    </script>
+</body>
+
+</html>

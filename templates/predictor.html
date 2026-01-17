@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Predictor | AI Smart Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #0c0a09;
+            --primary: #f97316;
+            /* Orange */
+            --secondary: #2dd4bf;
+            /* Teal */
+            --card: rgba(255, 255, 255, 0.03);
+            --text-main: #fdba74;
+            --text-teal: #2dd4bf;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, #431407 0%, transparent 40%),
+                radial-gradient(circle at bottom right, #0d9488 0%, transparent 40%);
+        }
+
+        .container {
+            background: var(--card);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            margin-top: 40px;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-teal);
+            margin-bottom: 30px;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #444;
+            color: white;
+            border-radius: 10px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        button.predict-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), #ea580c);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button.predict-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(249, 115, 22, 0.3);
+        }
+
+        .result-section {
+            display: none;
+            margin-top: 40px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .viz-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .score-card {
+            background: rgba(45, 212, 191, 0.1);
+            border: 1px solid var(--secondary);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .score-val {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin: 10px 0;
+        }
+
+        .chart-box {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid #222;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 40px;
+            color: var(--text-teal);
+            text-decoration: none;
+            opacity: 0.7;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>📈 AI Grade Predictor</h1>
+        <p class="subtitle">Linear Regression Analysis for Student Performance</p>
+
+        <div class="input-grid">
+            <div class="input-box">
+                <label>Test 1 Score (%)</label>
+                <input type="number" id="t1" value="70" min="0" max="100">
+            </div>
+            <div class="input-box">
+                <label>Test 2 Score (%)</label>
+                <input type="number" id="t2" value="75" min="0" max="100">
+            </div>
+            <div class="input-box">
+                <label>Test 3 Score (%)</label>
+                <input type="number" id="t3" value="82" min="0" max="100">
+            </div>
+        </div>
+
+        <button class="predict-btn" onclick="getPrediction()">Predict Final Grade</button>
+
+        <div id="result-section" class="result-section">
+            <div class="viz-container">
+                <div class="score-card">
+                    <div style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Predicted Final
+                    </div>
+                    <div class="score-val" id="final-score">0.00%</div>
+                    <div id="status-tag" style="font-weight: bold; color: var(--text-main);">Performance: Improving
+                    </div>
+                </div>
+                <div class="chart-box">
+                    <canvas id="predictionChart"></canvas>
+                </div>
+            </div>
+
+            <div
+                style="margin-top:20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; font-size: 0.9rem;">
+                <strong>AI Logic:</strong> Calculated Slope (m) = <span id="val-m"
+                    style="color:var(--primary)">0.5</span> and Intercept (c) = <span id="val-c"
+                    style="color:var(--primary)">65</span>.
+                Formula: <code>y = mx + c</code>
+            </div>
+        </div>
+
+        <a href="/" class="back-link">← Back to AI Laboratory</a>
+    </div>
+
+    <script>
+        let myChart = null;
+
+        async function getPrediction() {
+            const scores = [
+                parseFloat(document.getElementById('t1').value),
+                parseFloat(document.getElementById('t2').value),
+                parseFloat(document.getElementById('t3').value)
+            ];
+
+            const res = await fetch('/api/aiml/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ scores })
+            });
+            const data = await res.json();
+
+            // Update UI
+            document.getElementById('result-section').style.display = 'block';
+            document.getElementById('final-score').textContent = data.prediction + '%';
+            document.getElementById('status-tag').textContent = 'Performance: ' + data.status;
+            document.getElementById('val-m').textContent = data.slope;
+            document.getElementById('val-c').textContent = data.intercept;
+
+            updateGraph(scores, data.trend_line);
+        }
+
+        function updateGraph(original, trend) {
+            const ctx = document.getElementById('predictionChart').getContext('2d');
+
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Test 1', 'Test 2', 'Test 3', 'Final Exam'],
+                    datasets: [{
+                        label: 'Actual Scores',
+                        data: [...original, null],
+                        borderColor: '#f97316',
+                        backgroundColor: '#f97316',
+                        pointRadius: 6,
+                        showLine: false
+                    }, {
+                        label: 'AI Regression Trend',
+                        data: trend,
+                        borderColor: '#2dd4bf',
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 100,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#888' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#888' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#ccc' } }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

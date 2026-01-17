@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Independent Lab #{{ lab_id }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d0d12;
+            --primary: #00ff88;
+            --secondary: #6366f1;
+            --card: rgba(255, 255, 255, 0.03);
+            --text: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at 10% 10%, #1e1e2e 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, #0f172a 0%, transparent 40%);
+        }
+
+        .lab-container {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 28px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+            color: white;
+        }
+
+        p.desc {
+            color: #8892b0;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 14px;
+            background: #000;
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 12px;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: #000;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            border: 1px solid #1e293b;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-box pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            white-space: pre-wrap;
+            color: var(--primary);
+        }
+
+        .nav-footer {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-footer a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .nav-footer a:hover {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="lab-container">
+        <div class="badge">Standalone Project Lab #{{ lab_id }}</div>
+        <h1 id="title">Project Loading...</h1>
+        <p class="desc" id="desc"></p>
+
+        <div id="ui-content"></div>
+
+        <div class="result-box" id="result-box">
+            <label style="color:var(--primary)">Experimental Result:</label>
+            <pre id="output"></pre>
+        </div>
+
+        <div class="nav-footer">
+            <a href="/">← Exit to Portal</a>
+            <a href="/blockchain/lab/{{ lab_id + 1 }}" id="next-link">Next Independent Project →</a>
+        </div>
+    </div>
+
+    <script>
+        const labId = {{ lab_id }};
+        const projects = {
+            1: { title: "1. Hash Machine", desc: "Digital fingerprinting generator. Input data to get a unique SHA-256 string." },
+            2: { title: "2. Block Sealer", desc: "Package data into a block container with its own individual timestamp." },
+            3: { title: "3. Mining Puzzle", desc: "Find a nonce that produces a hash starting with zeros. Difficulty based." },
+            4: { title: "4. Address Gen", desc: "Randomly generate a new wallet address and its secret private key." },
+            5: { title: "5. Data Signer", desc: "Securely sign a piece of information using a simulated secret key." },
+            6: { title: "6. Event Log", desc: "Add activities to an isolated record-keeping system." },
+            7: { title: "7. Registry Check", desc: "Verify the ownership of a specific asset ID in a local database." },
+            8: { title: "8. Delay Simulator", desc: "See how long it takes to broadcast information across multiple nodes." },
+            9: { title: "9. Tamper Check", desc: "Verify if data matches an original hash or if it's been manipulated." },
+            10: { title: "10. Coin Tap", desc: "Request test coins for a wallet address from an independent faucet." }
+        };
+
+        const p = projects[labId];
+        document.getElementById('title').innerText = p.title;
+        document.getElementById('desc').innerText = p.desc;
+        if (labId === 10) document.getElementById('next-link').style.display = 'none';
+
+        const ui = document.getElementById('ui-content');
+
+        // UI GENERATION
+        if (labId === 1) {
+            ui.innerHTML = `<input type="text" id="in1" placeholder="Enter text..."><button onclick="run(1, 'in1')">Get Hash</button>`;
+        } else if (labId === 2) {
+            ui.innerHTML = `<input type="text" id="in2" placeholder="Block name..."><button onclick="run(2, 'in2')">Seal Block</button>`;
+        } else if (labId === 3) {
+            ui.innerHTML = `<label>Difficulty (1-4)</label><input type="number" id="in3" value="2" min="1" max="5"><button onclick="run(3, 'in3')">Start Mining</button>`;
+        } else if (labId === 4) {
+            ui.innerHTML = `<button onclick="run(4)">Randomly Generate</button>`;
+        } else if (labId === 5) {
+            ui.innerHTML = `<input type="text" id="in5-k" placeholder="Secret Key..."><input type="text" id="in5-m" placeholder="Message..."><button onclick="run(5, ['in5-k','in5-m'])">Sign Now</button>`;
+        } else if (labId === 6) {
+            ui.innerHTML = `<input type="text" id="in6" placeholder="Activity..."><button onclick="run(6, 'in6')">Add to Log</button>`;
+        } else if (labId === 7) {
+            ui.innerHTML = `<select id="in7"><option>Asset_001</option><option>Asset_002</option><option>Asset_003</option></select><button onclick="run(7, 'in7')">Search Registry</button>`;
+        } else if (labId === 8) {
+            ui.innerHTML = `<label>Number of Nodes</label><input type="number" id="in8" value="3"><button onclick="run(8, 'in8')">Broadcast</button>`;
+        } else if (labId === 9) {
+            ui.innerHTML = `<input type="text" id="in9-h" placeholder="Original Hash..."><input type="text" id="in9-d" placeholder="Current Data..."><button onclick="run(9, ['in9-h','in9-d'])">Check Integrity</button>`;
+        } else if (labId === 10) {
+            ui.innerHTML = `<input type="text" id="in10" placeholder="Wallet Address..."><button onclick="run(10, 'in10')">Tap Coins</button>`;
+        }
+
+        async function run(num, inputId) {
+            let body = { lab: num };
+            if (Array.isArray(inputId)) {
+                inputId.forEach(id => body[id.split('-').pop()] = document.getElementById(id).value);
+            } else if (inputId) {
+                body['data'] = document.getElementById(inputId).value;
+            }
+
+            const res = await fetch('/api/blockchain/lab/run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+
+            const box = document.getElementById('result-box');
+            const out = document.getElementById('output');
+            box.style.display = 'block';
+            out.innerText = JSON.stringify(data, null, 2);
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Portal | Advanced Python</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #f8fafc;
+            --accent-gold: #fbbf24;
+            --accent-teal: #2dd4bf;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle at top, #1e293b, #0f172a);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin-top: 50px;
+        }
+
+        h1 {
+            text-align: center;
+            background: linear-gradient(to right, var(--accent-gold), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Forms and Panels */
+        .panel {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            display: none;
+            /* Hidden by default */
+            animation: fadeIn 0.5s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Inputs */
+        input {
+            width: 100%;
+            /* fixed width: calc(100% - 24px); */
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #334155;
+            color: white;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--accent-gold);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #f59e0b;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        /* Dashboard Specifics */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(45, 212, 191, 0.1));
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        .history-item span.deposit {
+            color: var(--accent-teal);
+        }
+
+        .history-item span.withdraw {
+            color: var(--danger);
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>🏦 CodeAuraBank</h1>
+
+        <!-- 1. LOGIN / REGISTER VIEW -->
+        <div id="auth-panel" class="panel active">
+            <h2 style="margin-top:0">Welcome</h2>
+            <p style="color:#94a3b8">Secure Banking Management System</p>
+
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <button onclick="showAuthMode('login')" class="btn-secondary" id="tab-login"
+                    style="background:var(--accent-teal); color:black">Login</button>
+                <button onclick="showAuthMode('register')" class="btn-secondary" id="tab-register">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="form-login">
+                <input type="text" id="login-acc" placeholder="Account Number">
+                <input type="password" id="login-pin" placeholder="PIN">
+                <button class="btn-primary" onclick="login()">Access Account</button>
+            </div>
+
+            <!-- Register Form -->
+            <div id="form-register" style="display:none">
+                <input type="text" id="reg-name" placeholder="Full Name">
+                <input type="password" id="reg-pin" placeholder="Set 4-digit PIN" maxlength="4">
+                <input type="number" id="reg-initial" placeholder="Initial Deposit Amount">
+                <button class="btn-primary" onclick="register()">Create Account</button>
+            </div>
+            <p id="auth-msg" style="margin-top:15px; min-height:20px; font-size:0.9rem"></p>
+        </div>
+
+        <!-- 2. DASHBOARD VIEW -->
+        <div id="dashboard-panel" class="panel">
+            <div class="dashboard-header">
+                <div>
+                    <h3 id="user-name" style="margin:0">User</h3>
+                    <small id="user-acc" style="color:#94a3b8">#000000</small>
+                </div>
+                <button onclick="logout()" class="btn-danger" style="width:auto; padding:8px 16px; margin:0">Log
+                    Out</button>
+            </div>
+
+            <div class="balance-card">
+                <div style="font-size:0.9rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px">Total
+                    Balance</div>
+                <div class="balance-amount">$<span id="display-balance">0.00</span></div>
+            </div>
+
+            <div class="action-grid">
+                <button class="btn-secondary" onclick="showTransact('deposit')">⬇ Deposit</button>
+                <button class="btn-secondary" onclick="showTransact('withdraw')">⬆ Withdraw</button>
+            </div>
+
+            <div id="transaction-form"
+                style="display:none; background:rgba(0,0,0,0.2); padding:15px; border-radius:10px; margin-bottom:20px">
+                <h4 id="transact-title" style="margin-top:0">Deposit</h4>
+                <input type="number" id="transact-amount" placeholder="Amount">
+                <button class="btn-primary" onclick="processTransaction()">Confirm</button>
+                <button class="btn-secondary" onclick="document.getElementById('transaction-form').style.display='none'"
+                    style="margin-top:5px">Cancel</button>
+            </div>
+
+            <h4 style="margin-bottom:10px">Recent Activity</h4>
+            <ul id="history-list" class="history-list">
+                <!-- Items injected by JS -->
+            </ul>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">← Back to Game Portal</a>
+        </div>
+    </div>
+
+    <script>
+        let currentTransactionType = '';
+        let currentAcc = '';
+
+        function showAuthMode(mode) {
+            document.getElementById('form-login').style.display = mode === 'login' ? 'block' : 'none';
+            document.getElementById('form-register').style.display = mode === 'register' ? 'block' : 'none';
+
+            // Update tabs styling
+            document.getElementById('tab-login').style.background = mode === 'login' ? 'var(--accent-teal)' : 'rgba(255,255,255,0.1)';
+            document.getElementById('tab-login').style.color = mode === 'login' ? 'black' : 'white';
+            document.getElementById('tab-register').style.background = mode === 'register' ? 'var(--accent-teal)' : 'rgba(255,255,255,0.1)';
+            document.getElementById('tab-register').style.color = mode === 'register' ? 'black' : 'white';
+
+            document.getElementById('auth-msg').textContent = '';
+        }
+
+        async function register() {
+            const name = document.getElementById('reg-name').value;
+            const pin = document.getElementById('reg-pin').value;
+            const initial = document.getElementById('reg-initial').value;
+            const msg = document.getElementById('auth-msg');
+
+            if (!name || !pin) {
+                msg.textContent = "Please fill all fields";
+                msg.style.color = 'var(--danger)';
+                return;
+            }
+
+            const res = await fetch('/api/bank/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, pin, initial })
+            });
+            const data = await res.json();
+
+            if (data.account_number) {
+                msg.textContent = `Success! Your Account # is: ${data.account_number} (Remember this!)`;
+                msg.style.color = 'var(--accent-teal)';
+                // Switch to login
+                setTimeout(() => {
+                    showAuthMode('login');
+                    document.getElementById('login-acc').value = data.account_number;
+                }, 2000);
+            } else {
+                msg.textContent = data.error;
+                msg.style.color = 'var(--danger)';
+            }
+        }
+
+        async function login() {
+            const acc = document.getElementById('login-acc').value;
+            const pin = document.getElementById('login-pin').value;
+            const msg = document.getElementById('auth-msg');
+
+            const res = await fetch('/api/bank/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ acc_num: acc, pin })
+            });
+            const data = await res.json();
+
+            if (data.error) {
+                msg.textContent = data.error;
+                msg.style.color = 'var(--danger)';
+            } else {
+                currentAcc = acc;
+                loadDashboard(data.account_data);
+            }
+        }
+
+        function loadDashboard(data) {
+            document.getElementById('auth-panel').classList.remove('active');
+            document.getElementById('dashboard-panel').classList.add('active');
+
+            document.getElementById('user-name').textContent = data.name;
+            document.getElementById('user-acc').textContent = '#' + currentAcc;
+            updateBalanceDisplay(data.balance);
+            updateHistory(data.history);
+        }
+
+        function updateBalanceDisplay(amount) {
+            document.getElementById('display-balance').textContent = parseFloat(amount).toFixed(2);
+        }
+
+        function updateHistory(history) {
+            const list = document.getElementById('history-list');
+            list.innerHTML = '';
+            // Show last 10
+            const recent = history.slice().reverse().slice(0, 10);
+
+            recent.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                const isPlus = item.type === 'Deposit' || item.type === 'Created';
+                const colorClass = item.type === 'Withdraw' ? 'withdraw' : 'deposit';
+                const sign = item.type === 'Withdraw' ? '-' : '+';
+
+                li.innerHTML = `
+                <span>${item.type} <span style="color:#64748b; font-size:0.8em">(${item.date.split(' ')[0]})</span></span>
+                <span class="${colorClass}">${sign}$${item.amount}</span>
+            `;
+                list.appendChild(li);
+            });
+        }
+
+        function logout() {
+            currentAcc = '';
+            document.getElementById('dashboard-panel').classList.remove('active');
+            document.getElementById('auth-panel').classList.add('active');
+            document.getElementById('login-pin').value = '';
+        }
+
+        function showTransact(type) {
+            currentTransactionType = type;
+            document.getElementById('transaction-form').style.display = 'block';
+            document.getElementById('transact-title').textContent = type.charAt(0).toUpperCase() + type.slice(1);
+            document.getElementById('transact-amount').value = '';
+            document.getElementById('transact-amount').focus();
+        }
+
+        async function processTransaction() {
+            const amount = document.getElementById('transact-amount').value;
+            if (!amount || amount <= 0) return;
+
+            const res = await fetch('/api/bank/transact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    acc_num: currentAcc,
+                    type: currentTransactionType,
+                    amount: parseFloat(amount)
+                })
+            });
+            const data = await res.json();
+
+            if (data.error) {
+                alert(data.error);
+            } else {
+                updateBalanceDisplay(data.new_balance);
+                // Refresh history
+                const userRes = await fetch('/api/bank/status/' + currentAcc);
+                const userData = await userRes.json();
+                updateHistory(userData.history);
+
+                document.getElementById('transaction-form').style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

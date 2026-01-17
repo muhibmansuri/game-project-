@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice | CodeAura Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&family=Poppins:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #e5e5f7;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .invoice-box {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            color: #111;
+        }
+
+        .brand p {
+            margin: 5px 0 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .meta {
+            text-align: right;
+        }
+
+        .meta h2 {
+            margin: 0;
+            color: #10b981;
+        }
+
+        .meta p {
+            margin: 5px 0 0;
+            font-family: 'Courier Prime', monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th {
+            text-align: left;
+            background: #f9fafb;
+            padding: 15px;
+            border-bottom: 2px solid #000;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .total-section {
+            margin-top: 30px;
+            text-align: right;
+            border-top: 2px solid #000;
+            padding-top: 20px;
+        }
+
+        .grand-total {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #111;
+        }
+
+        .actions {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .btn {
+            background: #111;
+            color: white;
+            text-decoration: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #111;
+            border: 1px solid #111;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="invoice-box">
+        <header>
+            <div class="brand">
+                <h1>CodeAura Store</h1>
+                <p>Tech & Gadgets</p>
+            </div>
+            <div class="meta">
+                <h2>INVOICE</h2>
+                <p>Date: <span id="date"></span></p>
+                <p>Order ID: #<span id="orderId"></span></p>
+            </div>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Description</th>
+                    <th style="text-align:center">Qty</th>
+                    <th style="text-align:right">Price</th>
+                    <th style="text-align:right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if not cart['items'] %}
+                <tr>
+                    <td colspan="4" style="text-align:center">No items in invoice</td>
+                </tr>
+                {% else %}
+                {% for item in cart['items'] %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td style="text-align:center">{{ item.quantity }}</td>
+                    <td style="text-align:right">₹{{ item.product.price }}</td>
+                    <td style="text-align:right">₹{{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+
+        <div class="total-section">
+            <p>Subtotal: ₹{{ cart.total }}</p>
+            <p>Tax (0%): ₹0.00</p>
+            <div class="grand-total">₹{{ cart.total }}</div>
+        </div>
+
+        <div class="actions">
+            <a href="javascript:window.print()" class="btn">Print Invoice</a>
+            <a href="/" class="btn btn-outline" onclick="fetch('/api/store/cart/clear', {method:'POST'})">Back to
+                Home</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('date').innerText = new Date().toLocaleDateString();
+        document.getElementById('orderId').innerText = Math.floor(Math.random() * 90000) + 10000;
+    </script>
+</body>
+
+</html>

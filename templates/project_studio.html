@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Studio | Developer Tool</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Fira+Code:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --accent: #38bdf8;
+            --card: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: white;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .form-section {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-family: inherit;
+        }
+
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+        }
+
+        .output-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .step-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--accent);
+        }
+
+        pre {
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: #4ade80;
+            margin-top: 10px;
+        }
+
+        .copy-hint {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/"
+                style="color: var(--accent); text-decoration: none; font-weight: 500; margin-bottom: 20px; display: inline-block;">←
+                Back to Portal</a>
+            <h1>🛠️ Project Studio</h1>
+            <p>Apna naya project design karein aur portal mein add karna seekhein!</p>
+        </div>
+
+        <div class="form-section">
+            <h3 style="color: var(--accent); margin-top: 0;">⚡ One-Click Presets</h3>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 25px;">
+                <button
+                    onclick="applyPreset('Python Backend Master Class', 'backend_master', '🎓', 'Professional backend architecture, REST APIs, and Database integration.')"
+                    style="width: auto; padding: 8px 15px; font-size: 0.8rem; background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent); color: var(--accent);">🎓
+                    Backend Master Class</button>
+                <button
+                    onclick="applyPreset('AI Smart Lab', 'ai_lab', '🤖', 'Building and deploying neural networks and prediction models.')"
+                    style="width: auto; padding: 8px 15px; font-size: 0.8rem; background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent); color: var(--accent);">🤖
+                    AI Smart Lab</button>
+                <button
+                    onclick="applyPreset('Web3 Gateway', 'web3_app', '⛓️', 'Decentralized applications and blockchain ledger simulation.')"
+                    style="width: auto; padding: 8px 15px; font-size: 0.8rem; background: rgba(56, 189, 248, 0.1); border: 1px solid var(--accent); color: var(--accent);">⛓️
+                    Web3 Gateway</button>
+            </div>
+
+            <div class="input-group">
+                <label>Project Name (e.g., My New App)</label>
+                <input type="text" id="p-name" placeholder="Movie Searcher...">
+            </div>
+            <div class="input-group">
+                <label>ID (Short name in lowercase, no spaces)</label>
+                <input type="text" id="p-id" placeholder="movies">
+            </div>
+            <div class="input-group">
+                <label>Icon Emoji</label>
+                <input type="text" id="p-icon" placeholder="🎬">
+            </div>
+            <div class="input-group">
+                <label>Description</label>
+                <input type="text" id="p-desc" placeholder="Search and find movie details...">
+            </div>
+            <button onclick="generateCode()">Generate My Project Roadmap</button>
+        </div>
+
+        <div id="output" class="output-section">
+            <h2 style="color: var(--accent);">Mubarak Ho! Aapka Project Map Taiyar Hai:</h2>
+
+            <div class="step-card">
+                <h3>Step 1: UI Banana (HTML File)</h3>
+                <p>Nayi file banayein: <code>templates/<span class="id-text"></span>.html</code></p>
+                <pre id="code-html"></pre>
+                <p class="copy-hint">Isme aapka design aur frontend logic hoga.</p>
+            </div>
+
+            <div class="step-card">
+                <h3>Step 2: Backend Register Karein (app.py)</h3>
+                <p><code>app.py</code> ke end mein ye route add karein:</p>
+                <pre id="code-py"></pre>
+            </div>
+
+            <div class="step-card">
+                <h3>Step 3: Portal mein Card lagayein (home.html)</h3>
+                <p><code>home.html</code> mein kisi bhi grid section ke andar ye card paste karein:</p>
+                <pre id="code-card"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function applyPreset(name, id, icon, desc) {
+            document.getElementById('p-name').value = name;
+            document.getElementById('p-id').value = id;
+            document.getElementById('p-icon').value = icon;
+            document.getElementById('p-desc').value = desc;
+            generateCode();
+        }
+
+        function generateCode() {
+            const name = document.getElementById('p-name').value || 'New Project';
+            const id = document.getElementById('p-id').value || 'newproject';
+            const icon = document.getElementById('p-icon').value || '🚀';
+            const desc = document.getElementById('p-desc').value || 'Custom Project Description';
+
+            document.querySelectorAll('.id-text').forEach(el => el.textContent = id);
+
+            // HTML Code
+            document.getElementById('code-html').textContent = `<!DOCTYPE html>
+<html>
+<head>
+    <title>${name}</title>
+    <style>
+        body { background: #0f172a; color: white; font-family: sans-serif; text-align: center; padding: 50px; }
+        .box { background: rgba(255,255,255,0.1); padding: 40px; border-radius: 20px; border: 1px solid #38bdf8; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>${icon} ${name}</h1>
+        <p>${desc}</p>
+        <button onclick="alert('Working!')">Test Logic</button>
+        <br><br>
+        <a href="/" style="color: #38bdf8;">Back to Home</a>
+    </div>
+</body>
+</html>`;
+
+            // Python Code
+            document.getElementById('code-py').textContent = `@app.route('/${id}')
+def ${id}_page():
+    return render_template('${id}.html')`;
+
+            // Card Code
+            document.getElementById('code-card').textContent = `<div class="card" style="border-color: #38bdf8;">
+    <a href="/${id}" class="card-main">
+        <div class="icon">${icon}</div>
+        <h2>${name}</h2>
+        <p>${desc}</p>
+    </a>
+    <a href="/" class="learn-link">📖 Manual Build</a>
+</div>`;
+
+            document.getElementById('output').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('output').offsetTop, behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>

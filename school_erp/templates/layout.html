@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduManager ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <h2>EduManager</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/" class="{{ 'active' if request.path == '/' else '' }}">Dashboard</a></li>
+            <li><a href="/students" class="{{ 'active' if 'students' in request.path else '' }}">Students</a></li>
+            <li><a href="/teachers" class="{{ 'active' if 'teachers' in request.path else '' }}">Teachers</a></li>
+            <li><a href="#" style="opacity:0.5; cursor:not-allowed;">Fees (Coming Soon)</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+
+</html>

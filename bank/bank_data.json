@@ -1,0 +1,166 @@
+{
+    "464111": {
+        "name": "muhib",
+        "pin": "1307",
+        "balance": 100000.0,
+        "history": [
+            {
+                "type": "Created",
+                "amount": "100000",
+                "date": "2026-01-01 15:49:56"
+            }
+        ]
+    },
+    "743801": {
+        "name": "varsa",
+        "pin": "4545",
+        "balance": 999500.0,
+        "history": [
+            {
+                "type": "Created",
+                "amount": "1000000",
+                "date": "2026-01-01 15:50:26"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 500.0,
+                "date": "2026-01-01 15:50:45"
+            }
+        ]
+    },
+    "797686": {
+        "name": "abrar",
+        "pin": "7878",
+        "balance": 94900.0,
+        "history": [
+            {
+                "type": "Created",
+                "amount": "50000",
+                "date": "2026-01-01 15:52:06"
+            },
+            {
+                "type": "Deposit",
+                "amount": 45000.0,
+                "date": "2026-01-01 15:52:27"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 100.0,
+                "date": "2026-01-01 15:52:47"
+            }
+        ]
+    },
+    "126635": {
+        "name": "ruman ",
+        "pin": "1234",
+        "balance": 0.0,
+        "history": [
+            {
+                "type": "Created",
+                "amount": "50000",
+                "date": "2026-01-01 16:26:47"
+            },
+            {
+                "type": "Deposit",
+                "amount": 50000.0,
+                "date": "2026-01-01 16:28:28"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 100000.0,
+                "date": "2026-01-01 16:30:13"
+            }
+        ]
+    },
+    "103981": {
+        "name": "ruman ",
+        "pin": "1234",
+        "balance": 50000.0,
+        "history": [
+            {
+                "type": "Created",
+                "amount": "50000",
+                "date": "2026-01-01 16:33:54"
+            }
+        ]
+    },
+    "345932": {
+        "name": "muhibbb",
+        "pin": "1234",
+        "balance": 8500.0,
+        "history": [
+            {
+                "type": "Created",
+                "amount": "50000",
+                "date": "2026-01-01 16:35:43"
+            },
+            {
+                "type": "Deposit",
+                "amount": 4500.0,
+                "date": "2026-01-01 16:37:43"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 5000.0,
+                "date": "2026-01-01 16:38:32"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 41000.0,
+                "date": "2026-01-01 16:47:19"
+            }
+        ]
+    },
+    "493738": {
+        "name": "muhib",
+        "pin": "1307",
+        "balance": 75000.01,
+        "history": [
+            {
+                "type": "Created",
+                "amount": "45000",
+                "date": "2026-01-05 14:04:59"
+            },
+            {
+                "type": "Deposit",
+                "amount": 45000.0,
+                "date": "2026-01-05 14:05:27"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 45.0,
+                "date": "2026-01-05 14:05:46"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 780.0,
+                "date": "2026-01-05 14:05:55"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 785.0,
+                "date": "2026-01-05 14:06:01"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 450.0,
+                "date": "2026-01-05 14:06:12"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 7850.0,
+                "date": "2026-01-05 14:06:17"
+            },
+            {
+                "type": "Withdraw",
+                "amount": 80089.99,
+                "date": "2026-01-05 14:06:33"
+            },
+            {
+                "type": "Deposit",
+                "amount": 75000.0,
+                "date": "2026-01-05 14:06:47"
+            }
+        ]
+    }
+}

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detector AI | Cyber Security Lab</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030712;
+            --primary: #06b6d4;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+            --card: rgba(17, 24, 39, 0.8);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: #f3f4f6;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(rgba(6, 182, 212, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(6, 182, 212, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                scale: 0.98;
+            }
+
+            to {
+                opacity: 1;
+                scale: 1;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .cyber-badge {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            border: 1px solid var(--primary);
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            letter-spacing: -1px;
+            margin: 15px 0;
+            background: linear-gradient(to right, #06b6d4, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary);
+        }
+
+        .card.fraud-theme::before {
+            background: var(--danger);
+        }
+
+        .label {
+            display: block;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: #000;
+            font-weight: 800;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* HUD Results */
+        .hud-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .risk-meter {
+            height: 10px;
+            background: #111827;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .risk-fill {
+            height: 100%;
+            width: 0%;
+            transition: 1s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--success);
+        }
+
+        .reason-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .reason-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reason-item::before {
+            content: '>';
+            color: var(--primary);
+        }
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(6, 182, 212, 0.5);
+            animation: scan 3s linear infinite;
+            display: none;
+        }
+
+        @keyframes scan {
+            from {
+                top: 0;
+            }
+
+            to {
+                top: 100%;
+            }
+        }
+
+        .footer-nav {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer-nav a {
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <span class="cyber-badge">Access Key: AI-FRAUD-DETECTOR-SEC-01</span>
+            <h1>Fraud Detection Lab</h1>
+            <p style="color: #6b7280;">Bank transactions ka pattern analyze karein aur suspicious activities detect
+                karein.</p>
+        </div>
+
+        <div class="main-grid">
+            <!-- Input Terminal -->
+            <div class="card">
+                <span class="label">Transaction Terminal</span>
+
+                <label style="font-size: 0.75rem;">Amount (USD)</label>
+                <input type="number" id="in-amount" value="500">
+
+                <label style="font-size: 0.75rem;">Source Location</label>
+                <select id="in-loc">
+                    <option value="Local Store">Local Store (USA)</option>
+                    <option value="London">London (UK)</option>
+                    <option value="Russia">Moscow (Russia)</option>
+                    <option value="North Korea">Pyongyang (North Korea)</option>
+                    <option value="Offshore Island">Cayman Islands</option>
+                </select>
+
+                <label style="font-size: 0.75rem;">Frequency (Per Hour)</label>
+                <input type="number" id="in-freq" value="1">
+
+                <button class="btn" onclick="startScan()">Analyze Transaction</button>
+                <div class="scan-line" id="scanner"></div>
+            </div>
+
+            <!-- Result HUD -->
+            <div class="card" id="resultCard">
+                <span class="label">Risk Analysis HUD</span>
+
+                <div id="hudContent" style="display: none;">
+                    <div class="hud-status" id="hudStatus">SECURE</div>
+
+                    <div class="risk-meter">
+                        <div class="risk-fill" id="riskFill"></div>
+                    </div>
+
+                    <div
+                        style="display: flex; justify-content: space-between; font-family: 'JetBrains Mono'; font-size: 0.8rem; margin-bottom: 20px;">
+                        <span id="riskLabel">RISK SCORE: 0%</span>
+                        <span id="clearanceLabel">CLEARANCE: GRANTED</span>
+                    </div>
+
+                    <span class="label" style="font-size: 0.7rem;">Anomaly Breakdown</span>
+                    <div class="reason-box" id="reasonList">
+                        <!-- Reasons will appear here -->
+                    </div>
+                </div>
+
+                <div id="emptyHud"
+                    style="height: 100%; display: flex; align-items: center; justify-content: center; color: #374151;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem;">🛡️</div>
+                        <div style="font-size: 0.7rem; font-family: 'JetBrains Mono';">SYSTEM IDLE<br>WAITING FOR
+                            SCAN...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-nav">
+            <a href="/">← EXIT SECURE SHELL</a>
+        </div>
+    </div>
+
+    <script>
+        async function startScan() {
+            const scanner = document.getElementById('scanner');
+            const empty = document.getElementById('emptyHud');
+            const content = document.getElementById('hudContent');
+            const card = document.getElementById('resultCard');
+
+            // Animation Start
+            scanner.style.display = 'block';
+            empty.style.display = 'none';
+            content.style.opacity = '0.3';
+
+            const amount = document.getElementById('in-amount').value;
+            const location = document.getElementById('in-loc').value;
+            const freq = document.getElementById('in-freq').value;
+
+            const res = await fetch('/api/aiml/fraud', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount, location, freq })
+            });
+            const data = await res.json();
+
+            // Simulate thinking time
+            setTimeout(() => {
+                scanner.style.display = 'none';
+                content.style.display = 'block';
+                content.style.opacity = '1';
+
+                // Update HUD
+                const statusNode = document.getElementById('hudStatus');
+                const fill = document.getElementById('riskFill');
+                const scoreLabel = document.getElementById('riskLabel');
+                const clearLabel = document.getElementById('clearanceLabel');
+                const list = document.getElementById('reasonList');
+
+                statusNode.innerText = data.status;
+                scoreLabel.innerText = `RISK SCORE: ${data.risk_score}%`;
+                clearLabel.innerText = `CLEARANCE: ${data.security_clearance}`;
+
+                fill.style.width = data.risk_score + '%';
+
+                // Colors
+                if (data.is_fraud) {
+                    statusNode.style.color = 'var(--danger)';
+                    fill.style.background = 'var(--danger)';
+                    card.className = "card fraud-theme";
+                } else if (data.risk_score >= 30) {
+                    statusNode.style.color = 'var(--warning)';
+                    fill.style.background = 'var(--warning)';
+                    card.className = "card";
+                } else {
+                    statusNode.style.color = 'var(--success)';
+                    fill.style.background = 'var(--success)';
+                    card.className = "card";
+                }
+
+                // Reasons
+                list.innerHTML = data.reasons.map(r => `<div class="reason-item">${r}</div>`).join('');
+
+            }, 1000);
+        }
+    </script>
+
+</body>
+
+</html>

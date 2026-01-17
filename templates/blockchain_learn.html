@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Blockchain | Step-by-Step Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --card: #111;
+            --accent: #00ff88;
+            --secondary: #6366f1;
+            --text: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+        }
+
+        .step {
+            background: var(--card);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .step:hover {
+            border-color: var(--accent);
+            transform: translateX(10px);
+        }
+
+        .step-num {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            background: var(--accent);
+            color: black;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        h2 {
+            color: var(--accent);
+            margin-top: 5px;
+        }
+
+        code {
+            background: #000;
+            color: #ff79c6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        pre {
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            border: 1px solid #222;
+        }
+
+        .concept-art {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--secondary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .btn-group {
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Blockchain Explained (Simplified)</h1>
+        <p style="text-align: center; color: #888;">A complete guide for students to understand the magic of
+            decentralization.</p>
+
+        <!-- Step 1 -->
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="concept-art">📦</div>
+            <h2>What is a Block?</h2>
+            <p>Think of it as a <strong>Digital Page</strong> in a notebook. Each page stores information like <i>"Who
+                    sent money to whom"</i>. But it also contains a secret ID called a <strong>Hash</strong>.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="concept-art">🧬</div>
+            <h2>Hashing (The Digital DNA)</h2>
+            <p>Hashing converts any data into a fixed string of characters. If you change even 1 letter in the data, the
+                entire Hash changes. This makes the data <strong>Tamper-Proof</strong>.</p>
+            <pre><code># Data: "Hello" -> Hash: 185f8...
+# Data: "Hello." -> Hash: 75bc5... (Totally Different!)</code></pre>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="concept-art">🔗</div>
+            <h2>Linking the Chain</h2>
+            <p>Every block stores the <code>Previous Hash</code> of the block before it. This links them together. If
+                you change Block #1, its Hash changes, which breaks the link to Block #2, and so on. This is why it's a
+                <strong>Chain</strong>.</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="concept-art">⚒️</div>
+            <h2>Mining (Proof of Work)</h2>
+            <p>In our simulation, a valid block must have a Hash that starts with <code>00</code>. Since we can't change
+                the transactions, we change a random number called a <strong>Nonce</strong> millions of times until we
+                find a matching Hash. This is <strong>Mining</strong>.</p>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="concept-art">🌟</div>
+            <h2>Genesis Block</h2>
+            <p>The very first block in a blockchain is the <strong>Genesis Block</strong>. It has no previous block, so
+                its <code>Previous Hash</code> is set to <code>"0"</code>. It is the foundation of the entire chain.</p>
+        </div>
+
+        <div class="btn-group">
+            <a href="/blockchain" class="back-btn"
+                style="background: var(--accent); color: black; font-weight: bold;">Try the Simulator Now</a>
+            <br>
+            <a href="/" class="back-btn" style="margin-top: 15px;">Back to Home Portal</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

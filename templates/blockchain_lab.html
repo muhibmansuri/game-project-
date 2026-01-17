@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab #{{ lab_id }} | Blockchain Mastery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030712;
+            --primary: #00ff88;
+            --accent: #3b82f6;
+            --card: rgba(255, 255, 255, 0.03);
+            --text-main: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(0, 255, 136, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 40%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .step-badge {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            background: linear-gradient(to right, #00ff88, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.desc {
+            color: #9ca3af;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .lab-box {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        textarea,
+        input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #374151;
+            border-radius: 12px;
+            color: white;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        textarea:focus,
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 255, 136, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #00ff88, #059669);
+            border: none;
+            border-radius: 12px;
+            color: #030712;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .result-area {
+            margin-top: 40px;
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hash-result {
+            background: #000;
+            padding: 24px;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary);
+            font-family: 'Courier New', Courier, monospace;
+            word-break: break-all;
+            color: var(--primary);
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 30px;
+        }
+
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #facc15;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="step-badge">Lab Module #{{ lab_id }}</div>
+        <h1 id="lab-title">Loading Lab...</h1>
+        <p class="desc" id="lab-desc"></p>
+
+        <div class="lab-box" id="lab-content">
+            <!-- Specific Lab UI will be injected here -->
+        </div>
+
+        <div class="result-area" id="result-area">
+            <label>Output Result</label>
+            <div class="hash-result" id="output-val"></div>
+            <p style="margin-top: 15px; font-size: 0.85rem; color: #6b7280;" id="logic-explanation"></p>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">← Back to Portal</a>
+            <a href="/blockchain/lab/{{ lab_id + 1 }}" id="next-btn"
+                style="{{ 'display:none' if lab_id == 10 else '' }}">Next Lab: Step {{ lab_id + 1 }} →</a>
+        </div>
+    </div>
+
+    <script>
+        const labId = {{ lab_id }};
+        const titles = {
+            1: "SHA-256 Hash Machine",
+            2: "Immutable Block Creator",
+            3: "The Chain Linker",
+            4: "PoW Mining Simulator",
+            5: "Mempool Manager",
+            6: "Digital Wallet Generator",
+            7: "Transaction Signer",
+            8: "Economic Reward Engine",
+            9: "Global Ledger Search",
+            10: "AuraCoin Final System"
+        };
+        const descriptions = {
+            1: "Blockchain start hoti hai 'Hashing' se. Ek SHA-256 hash text ko 64 chars ke unique fingerprint mein badal deta hai. Kuch bhi badlo, hash bilkul badal jayega!",
+            2: "Block ek container hota hai. Isme transactions, timestamp aur 'previous_hash' hota hai. Is container ke andar ka data kabhi change nahi kiya ja sakta.",
+            3: "Blockchain ki asli power 'Linking' hai. Har naya block pichle block ka hash apne paas rakhta hai. Agar ek bhi block badla, poori chain tot jayegi.",
+            4: "Mining ka matlab hai ek 'Math puzzle' solve karna. Aapko ek 'Nonce' dhoondhna hota hai taaki block ka hash zero (0) se shuru ho.",
+            5: "Transactions mine hone se pehle ek waiting room mein hote hain jise 'Mempool' kehte hain. Yahan se miner unhe uthakar block banata hai.",
+            6: "Coins kharch karne ke liye aapko Public aur Private keys chahiye. Public Address sabko dikhti hai, par Private Key sirf aapke paas hoti hai.",
+            7: "Privacy zaroori hai! Har transaction ko Private Key se 'Sign' karna padta hai taaki blockchain verify kar sake ki ye transaction aapne hi kiya hai.",
+            8: "Miners free mein kaam nahi karte! Jab wo block mine karte hain, unhe network ki taraf se 'Rewards' (Coins) milte hain.",
+            9: "Blockchain ek open ledger hai. Aap kisi bhi wallet address ko search karke uska balance aur poori transaction history check kar sakte hain.",
+            10: "Final Project! Humne jo sikha un sabka use karke ek complete digital currency 'AuraCoin' chalao. Transactions, Mining, aur Wallets!"
+        };
+
+        document.getElementById('lab-title').textContent = titles[labId];
+        document.getElementById('lab-desc').textContent = descriptions[labId];
+
+        // Inject UI based on Lab ID
+        const ui = document.getElementById('lab-content');
+        if (labId === 1) {
+            ui.innerHTML = `
+            <label>Input Text (Kuch bhi type karein)</label>
+            <textarea id="input-1" placeholder="Example: Hello World" rows="4"></textarea>
+            <button onclick="runLab1()">Generate SHA-256 Hash</button>
+        `;
+        } else if (labId === 2) {
+            ui.innerHTML = `
+            <label>Transaction Data</label>
+            <input type="text" id="input-2" placeholder="Example: Alice sends 10 Aura to Bob">
+            <button onclick="runLab2()">Create Block Package</button>
+        `;
+        } else if (labId === 3) {
+            ui.innerHTML = `
+            <p style="color:#aaa; border-bottom:1px solid #333; padding-bottom:10px;">Blocks are linked via <code>previous_hash</code>.</p>
+            <button onclick="runLab3()">Verify Chain Connectivity</button>
+        `;
+        } else if (labId === 4) {
+            ui.innerHTML = `
+            <label>Difficulty (Num of Zeroes)</label>
+            <input type="number" id="input-4" value="2" min="1" max="4">
+            <button onclick="runLab4()">Start PoW Mining</button>
+        `;
+        } else if (labId === 5) {
+            ui.innerHTML = `
+            <label>New Transaction</label>
+            <input type="text" id="input-5" placeholder="Add data to pending queue...">
+            <button onclick="runLab5()">Add to Mempool</button>
+        `;
+        } else if (labId === 6) {
+            ui.innerHTML = `
+            <p style="color:#aaa; margin-bottom:20px;">Apna personal cryptographic identity banayein.</p>
+            <button onclick="runLab6()">Generate New Keys</button>
+        `;
+        } else if (labId === 7) {
+            ui.innerHTML = `
+            <label>Private Key</label>
+            <input type="text" id="input-7-key" placeholder="Paste Private Key...">
+            <label>Transaction Message</label>
+            <input type="text" id="input-7-msg" placeholder="Transaction Data...">
+            <button onclick="runLab7()">Sign Transaction</button>
+        `;
+        } else if (labId === 8) {
+            ui.innerHTML = `
+            <label>Miner Wallet Address</label>
+            <input type="text" id="input-8" placeholder="0x...">
+            <button onclick="runLab8()">Mine Block & Get Reward</button>
+        `;
+        } else if (labId === 9) {
+            ui.innerHTML = `
+            <label>Search Address</label>
+            <input type="text" id="input-9" placeholder="0x...">
+            <button onclick="runLab9()">Check Balance & History</button>
+        `;
+        } else if (labId === 10) {
+            ui.innerHTML = `
+            <p style="color:#facc15; font-weight:bold;">AuraCoin Mainnet Dashboard</p>
+            <button onclick="runLab10()">View Full Ledger Snapshot</button>
+        `;
+        }
+
+        async function runLab1() {
+            const text = document.getElementById('input-1').value;
+            const res = await fetch('/api/blockchain_lab/hash', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text })
+            });
+            const data = await res.json();
+            showResult(data.hash, "AI Logic: Python ne `hashlib.sha256` ka use karke aapke data ka unique digital fingerprint banaya hai.");
+        }
+
+        async function runLab2() {
+            const text = document.getElementById('input-2').value;
+            const res = await fetch('/api/blockchain_lab/block', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ data: text })
+            });
+            const data = await res.json();
+            showResult(`<pre>${JSON.stringify(data.block, null, 2)}</pre>`, "AI Logic: Data packaging complete. Blocks have indices and timestamps.");
+        }
+
+        async function runLab3() {
+            const res = await fetch('/api/blockchain_lab/chain_status', { method: 'POST' });
+            const data = await res.json();
+            showResult(`Chain Length: ${data.chain_length}<br>Latest Hash: ${data.chain[data.chain.length - 1].hash}`, "AI Logic: Har block apne pichle block se mathmetically linked hai.");
+        }
+
+        async function runLab4() {
+            const diff = document.getElementById('input-4').value;
+            const res = await fetch('/api/blockchain_lab/mine_demo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ diff })
+            });
+            const data = await res.json();
+            showResult(`Nonce Found: ${data.mined_block.nonce}<br>Hash: ${data.hash}`, "AI Logic: Computer ne hazaron random values trial kiye jab tak requirement puri nahi hui.");
+        }
+
+        async function runLab5() {
+            const tx = document.getElementById('input-5').value;
+            const res = await fetch('/api/blockchain_lab/mempool_add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tx })
+            });
+            const data = await res.json();
+            showResult(`Mempool Count: ${data.mempool_count}`, "AI Logic: Transaction line mein hai. Agle block mein ise mine kiya jayega.");
+        }
+
+        async function runLab6() {
+            const res = await fetch('/api/blockchain_lab/wallet', { method: 'POST' });
+            const data = await res.json();
+            const html = `ADDRESS: ${data.address}<br><br>PRIVATE KEY: ${data.private_key}`;
+            showResult(html, "AI Logic: Private key random seed se bani hai. Isse kabhi kisi ke saath share na karein!");
+        }
+
+        async function runLab7() {
+            const key = document.getElementById('input-7-key').value;
+            const msg = document.getElementById('input-7-msg').value;
+            const res = await fetch('/api/blockchain_lab/sign', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key, msg })
+            });
+            const data = await res.json();
+            showResult(`Signature: ${data.signature}`, "AI Logic: Private key ka use karke ek mathematical 'Seal' banayi gayi jo owner verify karti hai.");
+        }
+
+        async function runLab8() {
+            const addr = document.getElementById('input-8').value;
+            const res = await fetch('/api/blockchain_lab/mine_final', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ addr })
+            });
+            const data = await res.json();
+            showResult(`Reward: ${data.reward} AuraCoins issued to ${addr}`, "AI Logic: Miner ko network secure karne ke badle naye coins mint karke diye gaye.");
+        }
+
+        async function runLab9() {
+            const addr = document.getElementById('input-9').value;
+            const res = await fetch('/api/blockchain_lab/balance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ addr })
+            });
+            const data = await res.json();
+            showResult(`Balance: ${data.balance} AuraCoins`, "AI Logic: System ne poore ledger ko scan kiya balances calculate karne ke liye.");
+        }
+
+        async function runLab10() {
+            const res = await fetch('/api/blockchain_lab/full_status', { method: 'POST' });
+            const data = await res.json();
+            showResult(`<pre style="font-size:0.8rem">${JSON.stringify(data, null, 2)}</pre>`, "AI Logic: Ye aapka poora decentralized database hai. Sab kuch transparent aur immutable hai.");
+        }
+
+        function showResult(val, logic) {
+            document.getElementById('result-area').style.display = 'block';
+            document.getElementById('output-val').innerHTML = val;
+            document.getElementById('logic-explanation').textContent = logic;
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+
+</html>

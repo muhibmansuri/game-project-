@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ stats.total_students }}</div>
+        <div class="stat-label">Total Students</div>
+    </div>
+    <div class="stat-card green">
+        <div class="stat-number">{{ stats.total_teachers }}</div>
+        <div class="stat-label">Total Teachers</div>
+    </div>
+    <div class="stat-card orange">
+        <div class="stat-number">42</div>
+        <div class="stat-label">Attended Today</div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 30px;">
+    <h3>📌 Quick Notices</h3>
+    <ul>
+        <li>Exam schedule has been updated for Class 10.</li>
+        <li>Teacher's meeting at 3:00 PM tomorrow.</li>
+        <li>Fee submission deadline: 15th Jan.</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h3>Recent Admissions</h3>
+    {% if not stats.recent_admissions %}
+    <p>No students enrolled yet.</p>
+    {% else %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in stats.recent_admissions %}
+            <tr>
+                <td>{{ s.id }}</td>
+                <td>{{ s.name }}</td>
+                <td>{{ s.class }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}

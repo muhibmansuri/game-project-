@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Store | Shop Now</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --accent: #f59e0b;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: #f3f4f6;
+        }
+
+        header {
+            background: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #111;
+        }
+
+        .cart-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .badge {
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            margin: 20px 5%;
+            gap: 30px;
+        }
+
+        .products-grid {
+            flex: 2;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .cart-panel {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            height: fit-content;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 90px;
+        }
+
+        /* Product Card */
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            transition: transform 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .p-img {
+            height: 150px;
+            background: #f9fafb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+        }
+
+        .p-details {
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .p-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .p-desc {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 10px;
+            flex-grow: 1;
+        }
+
+        .p-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .p-price {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .btn-buy {
+            background: #111;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-buy:hover {
+            background: var(--primary);
+        }
+
+        /* Cart Items */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .cart-controls button {
+            background: #e5e7eb;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #9ca3af;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div style="display: items-center; gap: 10px; display: flex;">
+            <a href="/" style="text-decoration:none; font-size: 1.5rem;">🏠</a>
+            <h1>Mini Store</h1>
+        </div>
+        <button class="cart-btn">
+            Cart <span class="badge" id="headerCount">0</span>
+        </button>
+    </header>
+
+    <div class="container">
+        <!-- Products Area -->
+        <div class="products-grid" id="productList">
+            <!-- JS will inject products -->
+        </div>
+
+        <!-- Cart Sidebar -->
+        <div class="cart-panel">
+            <h2>Your Cart</h2>
+            <div id="cartItems">
+                <div class="empty-msg">Cart is empty</div>
+            </div>
+            <div
+                style="margin-top: 20px; border-top: 2px solid #f3f4f6; padding-top: 15px; display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem;">
+                <span>Total:</span>
+                <span id="cartTotal">₹0</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Checkout Now</button>
+        </div>
+    </div>
+
+    <script>
+        async function loadProducts() {
+            const res = await fetch('/api/store/products');
+            const products = await res.json();
+
+            const container = document.getElementById('productList');
+            container.innerHTML = products.map(p => `
+            <div class="product-card">
+                <div class="p-img">${p.image}</div>
+                <div class="p-details">
+                    <div class="p-name">${p.name}</div>
+                    <div class="p-desc">${p.desc}</div>
+                    <div class="p-footer">
+                        <div class="p-price">₹${p.price}</div>
+                        <button class="btn-buy" onclick="addToCart(${p.id})">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+            refreshCart();
+        }
+
+        async function addToCart(id) {
+            await fetch('/api/store/cart/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id })
+            });
+            refreshCart();
+        }
+
+        async function updateQty(id, change) {
+            await fetch('/api/store/cart/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id, change: change })
+            });
+            refreshCart();
+        }
+
+        async function refreshCart() {
+            const res = await fetch('/api/store/cart');
+            const data = await res.json();
+
+            document.getElementById('headerCount').innerText = data.count;
+            document.getElementById('cartTotal').innerText = '₹' + data.total;
+
+            const container = document.getElementById('cartItems');
+            if (data.items.length === 0) {
+                container.innerHTML = '<div class="empty-msg">Cart is empty</div>';
+                return;
+            }
+
+            container.innerHTML = data.items.map(item => `
+            <div class="cart-item">
+                <div>
+                    <div style="font-weight:500">${item.product.name}</div>
+                    <div style="font-size:0.8rem; color:#666">₹${item.product.price} x ${item.quantity}</div>
+                </div>
+                <div class="cart-controls">
+                    <button onclick="updateQty(${item.product.id}, -1)">-</button>
+                    <span style="font-size:0.9rem; margin: 0 5px;">${item.quantity}</span>
+                    <button onclick="updateQty(${item.product.id}, 1)">+</button>
+                </div>
+            </div>
+        `).join('');
+        }
+
+        async function checkout() {
+            const res = await fetch('/api/store/cart');
+            const data = await res.json();
+            if (data.count === 0) return alert("Cart is empty!");
+
+            // Redirect to invoice page
+            window.location.href = '/store/checkout';
+        }
+
+        loadProducts();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Digit Recognizer | Neural Visualizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020617;
+            --primary: #8b5cf6;
+            --accent: #06b6d4;
+            --card: rgba(30, 41, 59, 0.5);
+            --neural-on: #00ff88;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: #f8fafc;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(6, 182, 212, 0.1) 0%, transparent 40%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .header {
+            grid-column: span 2;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 10px 0;
+            background: linear-gradient(to right, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .panel {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .canvas-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #drawCanvas {
+            background: #000;
+            border: 4px solid #1e293b;
+            border-radius: 16px;
+            cursor: crosshair;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            touch-action: none;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-clear {
+            background: #334155;
+            color: white;
+        }
+
+        .btn-predict {
+            background: var(--primary);
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* Neural Visualizer Styles */
+        .visualizer-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .neural-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .neuron {
+            aspect-ratio: 1;
+            background: #0f172a;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background 0.5s;
+        }
+
+        .prediction-hero {
+            text-align: center;
+            padding: 20px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .digit-display {
+            font-size: 5rem;
+            font-weight: 800;
+            color: var(--neural-on);
+            line-height: 1;
+        }
+
+        .prob-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .prob-bar-container {
+            display: grid;
+            grid-template-columns: 20px 1fr 40px;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+        }
+
+        .prob-bar-bg {
+            height: 8px;
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .prob-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent);
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="badge">Module #4: Neural Network Visualization</div>
+            <h1>AI Digit Drawing Recognizer</h1>
+            <p style="color: #64748b;">Niche box mein koi ek single digit (0-9) draw karein.</p>
+        </div>
+
+        <!-- Panel 1: Input -->
+        <div class="panel canvas-area">
+            <canvas id="drawCanvas" width="280" height="280"></canvas>
+            <div class="controls">
+                <button class="btn-clear" onclick="clearCanvas()">❌ Clear Screen</button>
+                <button class="btn-predict" onclick="predictDigit()">🧠 Recognize Digit</button>
+            </div>
+            <p style="font-size: 0.8rem; color: #475569; margin-top: 15px;">
+                Tip: Digit ko center mein thoda bada draw karein.
+            </p>
+        </div>
+
+        <!-- Panel 2: Neural View -->
+        <div class="panel">
+            <div class="visualizer-title">Neural Hidden Layers (Input Scan)</div>
+            <div class="neural-grid" id="neuralGrid">
+                <!-- 16 Neurons -->
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+                <div class="neuron"></div>
+            </div>
+
+            <div class="prediction-hero">
+                <div style="font-size: 0.8rem; color: #94a3b8; font-weight: bold; margin-bottom: 5px;">AI PREDICTION
+                </div>
+                <div class="digit-display" id="mainDigit">?</div>
+                <div style="font-size: 0.9rem; color: #64748b;" id="mainConf">Waiting for input...</div>
+            </div>
+
+            <div class="prob-list" id="probList">
+                <!-- Probabilities will be injected here -->
+            </div>
+        </div>
+
+        <div style="grid-column: span 2; text-align: center; margin-top: 20px;">
+            <a href="/" style="color: #64748b; text-decoration: none; font-size: 0.9rem;">← Back to AI Portal</a>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+
+        // Canvas Setup
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 20;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        // Drawing Logic
+        const startDrawing = (e) => { isDrawing = true; draw(e); }
+        const stopDrawing = () => { isDrawing = false; ctx.beginPath(); }
+        const draw = (e) => {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX || e.touches[0].clientX) - rect.left;
+            const y = (e.clientY || e.touches[0].clientY) - rect.top;
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('mainDigit').innerText = '?';
+            document.getElementById('mainConf').innerText = 'Waiting for input...';
+            document.getElementById('probList').innerHTML = '';
+            updateNeurons(new Array(16).fill(0));
+        }
+
+        async function predictDigit() {
+            const btn = document.querySelector('.btn-predict');
+            const mainDigit = document.getElementById('mainDigit');
+
+            // Visual Feedback
+            btn.innerText = "⏳ Analyzing...";
+            btn.disabled = true;
+            mainDigit.style.opacity = "0.3";
+
+            try {
+                // 1. Convert Canvas to 28x28 grayscale array
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = 28;
+                tempCanvas.height = 28;
+                const tCtx = tempCanvas.getContext('2d');
+
+                // Draw original canvas onto small 28x28 canvas
+                tCtx.drawImage(canvas, 0, 0, 28, 28);
+
+                const imgData = tCtx.getImageData(0, 0, 28, 28).data;
+                const pixels = [];
+                for (let i = 0; i < imgData.length; i += 4) {
+                    // Get maximum value from RGB + Alpha for better contrast
+                    const val = Math.max(imgData[i], imgData[i + 1], imgData[i + 2], imgData[i + 3]);
+                    pixels.push(val / 255);
+                }
+
+                // 2. Send to Backend with a timestamp to avoid any caching
+                const res = await fetch('/api/aiml/digit?cache=' + Date.now(), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pixels })
+                });
+                const data = await res.json();
+
+                // 3. Render Results
+                renderUI(data);
+            } catch (err) {
+                console.error(err);
+                alert("Connection error!");
+            } finally {
+                btn.innerText = "🧠 Recognize Digit";
+                btn.disabled = false;
+                mainDigit.style.opacity = "1";
+            }
+        }
+
+        function renderUI(data) {
+            document.getElementById('mainDigit').innerText = data.prediction;
+            document.getElementById('mainConf').innerText = `Confidence: ${data.confidence}%`;
+
+            // Update Neurons
+            updateNeurons(data.visual_map);
+
+            // Update Probability Bars
+            const list = document.getElementById('probList');
+            list.innerHTML = data.all_probabilities.slice(0, 5).map(p => `
+            <div class="prob-bar-container">
+                <div>${p.digit}</div>
+                <div class="prob-bar-bg">
+                    <div class="prob-bar-fill" style="width: ${p.probability}%"></div>
+                </div>
+                <div style="text-align: right; color: #94a3b8;">${p.probability}%</div>
+            </div>
+        `).join('');
+        }
+
+        function updateNeurons(map) {
+            const neurons = document.querySelectorAll('.neuron');
+            neurons.forEach((n, i) => {
+                const intensity = Math.floor(map[i] * 255);
+                n.style.background = `rgba(0, 255, 136, ${map[i]})`;
+                n.style.boxShadow = intensity > 50 ? `0 0 10px rgba(0, 255, 136, ${map[i]})` : 'none';
+            });
+        }
+    </script>
+
+</body>
+
+</html>

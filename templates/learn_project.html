@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Roadmap | {{ title }}</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --accent: #6366f1;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f1f5f9;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            line-height: 1.6;
+            background-image:
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .badge {
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin: 20px 0;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .lang-switch {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .lang-btn {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            color: #94a3b8;
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .section {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.8rem;
+            color: var(--accent);
+        }
+
+        .step-card {
+            margin-top: 30px;
+            padding-left: 30px;
+            border-left: 2px solid var(--border);
+            position: relative;
+        }
+
+        .step-num {
+            position: absolute;
+            left: -15px;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background: var(--bg);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #fb7185;
+        }
+
+        .code-block {
+            background: #000;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #64748b;
+        }
+
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        [lang="hinglish"] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <span class="badge">Student Roadmap</span>
+            <h1>{{ title }}</h1>
+            <p style="color: #94a3b8;">{{ subtitle }}</p>
+
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="setLang('english')">English</button>
+                <button class="lang-btn" onclick="setLang('hinglish')">Hinglish</button>
+            </div>
+        </div>
+
+        <!-- content will be injected or shown based on language -->
+        <div id="english-content">
+            <div class="section">
+                <h2>⚙️ Prerequisites & Setup</h2>
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div style="font-weight: 700; color: #fff;">Open VS Code & Folder</div>
+                    <p style="color: #94a3b8;">Create a new folder and open it in VS Code. Create a file named
+                        <code>app.py</code>.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div style="font-weight: 700; color: #fff;">Install Dependencies</div>
+                    <p style="color: #94a3b8;">Open terminal (Ctrl+`) and run: <code>pip install flask</code></p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📖 English Roadmap</h2>
+                {% for step in english_steps %}
+                <div class="step-card">
+                    <div class="step-num">{{ loop.index + 2 }}</div>
+                    <div style="font-weight: 700; font-size: 1.1rem; color: #fff;">{{ step.title }}</div>
+                    <p style="margin: 5px 0 0 0; color: #94a3b8;">{{ step.desc | safe }}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if english_code %}
+            <div class="section">
+                <h2>💻 Implementation Code</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px;">Copy these snippets into your files
+                    to build this feature.</p>
+                {{ english_code | safe }}
+            </div>
+            {% endif %}
+
+            {% if english_details %}
+            <div class="section">
+                <h2>🏗️ Architecture Backstory</h2>
+                <div style="color: #94a3b8;">
+                    {{ english_details | safe }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div id="hinglish-content" style="display: none;">
+            <div class="section">
+                <h2>⚙️ Setup aur Taiyari</h2>
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <div style="font-weight: 700; color: #fff;">VS Code Open Karein</div>
+                    <p style="color: #94a3b8;">Ek naya folder banayein aur use VS Code mein open karein. Ek
+                        <code>app.py</code> file banayein.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <div style="font-weight: 700; color: #fff;">Install Flask</div>
+                    <p style="color: #94a3b8;">Terminal (Ctrl+J) open karein aur ye command chalayein:
+                        <code>pip install flask</code></p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>💡 Hinglish Roadmap</h2>
+                {% for step in hinglish_steps %}
+                <div class="step-card">
+                    <div class="step-num">{{ loop.index + 2 }}</div>
+                    <div style="font-weight: 700; font-size: 1.1rem; color: #fff;">{{ step.title }}</div>
+                    <p style="margin: 5px 0 0 0; color: #94a3b8;">{{ step.desc | safe }}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if hinglish_code %}
+            <div class="section">
+                <h2>💻 Code Copy-Paste</h2>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 20px;">Apni files mein ye code copy karein.
+                </p>
+                {{ hinglish_code | safe }}
+            </div>
+            {% endif %}
+
+            {% if hinglish_details %}
+            <div class="section">
+                <h2>🔍 Deep Dive: Kaise Bana?</h2>
+                <div style="color: #94a3b8;">
+                    {{ hinglish_details | safe }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            <p>Ready to build? <a href="/">← Return to Portal</a></p>
+        </div>
+    </div>
+
+    <script>
+        function setLang(lang) {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (lang === 'english') {
+                document.getElementById('english-content').style.display = 'block';
+                document.getElementById('hinglish-content').style.display = 'none';
+            } else {
+                document.getElementById('english-content').style.display = 'none';
+                document.getElementById('hinglish-content').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

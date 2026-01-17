@@ -1,0 +1,102 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+    background-color: #f4f7f6;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+.logo {
+    padding: 20px;
+    text-align: center;
+    border-bottom: 1px solid #34495e;
+    background-color: #1a252f;
+}
+.logo h2 { margin: 0; color: #ecf0f1; font-weight: 700; }
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+.nav-links a {
+    display: block;
+    padding: 15px 20px;
+    color: #bdc3c7;
+    text-decoration: none;
+    transition: 0.3s;
+    border-left: 4px solid transparent;
+}
+.nav-links a:hover, .nav-links a.active {
+    background-color: #34495e;
+    color: white;
+    border-left-color: #1abc9c;
+}
+
+/* Main Content */
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* Cards */
+.card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+.stat-card {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+.stat-card.green { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+.stat-card.orange { background: linear-gradient(135deg, #e67e22, #d35400); }
+
+.stat-number { font-size: 2.5rem; font-weight: bold; margin: 10px 0; }
+.stat-label { font-size: 1rem; opacity: 0.9; }
+
+/* Tables & Forms */
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+th { background-color: #f8f9fa; color: #7f8c8d; }
+
+.btn {
+    padding: 10px 20px;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-danger { background-color: #e74c3c; padding: 5px 10px; font-size: 0.8rem; }
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

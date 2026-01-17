@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industry Mastery | CodeAura Professional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020617;
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.4);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 20%);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .standards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+        }
+
+        .standard-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .standard-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .standard-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-glow);
+        }
+
+        .standard-card:hover::before {
+            opacity: 1;
+        }
+
+        .icon-box {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .standard-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .standard-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .steps-list li::before {
+            content: '>';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .cta-section {
+            margin-top: 100px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(129, 140, 248, 0.1));
+            padding: 60px;
+            border-radius: 30px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .cta-section h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .btn-pro {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-pro:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(56, 189, 248, 0.5);
+        }
+
+        .nav-back {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: 0.3s;
+            z-index: 100;
+        }
+
+        .nav-back:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .standards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <a href="/" class="nav-back">← Back to Portal</a>
+
+    <div class="container">
+        <div class="header">
+            <h1>Industry Mastery Path</h1>
+            <p>Sahi tarike se project banana hi professional engineering ka pehla kadam hai. Seekhein wo standards jo
+                top tech companies follow karti hain.</p>
+        </div>
+
+        <div class="standards-grid">
+            {% for key, standard in standards.items() %}
+            <div class="standard-card">
+                <div class="icon-box">{{ standard.icon }}</div>
+                <h2>{{ standard.title }}</h2>
+                <p>{{ standard.desc }}</p>
+                <ul class="steps-list">
+                    {% for step in standard.steps %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to Build Like a Pro?</h3>
+            <p>Hum aapke next project ko industry-standard structure mein convert karne mein madad karenge.</p>
+            <a href="/studio" class="btn-pro">Start Professional Project 🚀</a>
+        </div>
+    </div>
+</body>
+
+</html>

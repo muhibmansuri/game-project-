@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Portal | Advanced Python</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-primary: #f8fafc;
+            --accent-blue: #38bdf8;
+            --accent-pink: #f472b6;
+            --accent-green: #4ade80;
+            --accent-purple: #a855f7;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 50px;
+            background: radial-gradient(circle at center, #1e293b, #0f172a);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 40px 0 20px;
+            background: linear-gradient(to right, var(--accent-blue), var(--accent-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .grid {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 20px;
+            width: 220px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+        }
+
+        .card-main {
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .learn-link {
+            display: block;
+            margin-top: 15px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .learn-link:hover {
+            border-color: white;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.2);
+            border-color: var(--accent-blue);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Color themes for cards */
+        .card.snake:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 10px 30px rgba(74, 222, 128, 0.2);
+        }
+
+        .card.hanoi:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
+        }
+
+        .category-header {
+            width: 100%;
+            margin-top: 60px;
+            text-align: left;
+            padding-left: 20px;
+            max-width: 1100px;
+        }
+
+        .category-header h2 {
+            font-size: 1.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CodeAura Project Portal</h1>
+    <div style="margin-bottom: 30px; display: flex; gap:15px;">
+        <a href="/studio"
+            style="background: var(--accent-blue); color: var(--bg-color); padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.9rem; box-shadow: 0 0 15px var(--accent-blue);">🛠️
+            Open Project Studio</a>
+    </div>
+
+    <div class="grid">
+        <!-- 1. INDUSTRIAL SYSTEMS -->
+        <div class="category-header">
+            <h2 style="color: var(--accent-blue);">🏢 Industrial Management Systems</h2>
+        </div>
+
+        <div class="card"
+            style="border-width: 2px; border-color: var(--accent-blue); background: linear-gradient(145deg, rgba(56, 189, 248, 0.1), rgba(0,0,0,0));">
+            <a href="/backend_master" class="card-main">
+                <div class="icon">🎓</div>
+                <h2 style="color: var(--accent-blue);">Master Class</h2>
+                <p>Advanced Python Backend Architecture.</p>
+            </a>
+            <a href="/studio" class="learn-link"
+                style="color: var(--accent-blue); border-color: var(--accent-blue);">🛠️ Build in Studio</a>
+        </div>
+
+        <div class="card"
+            style="border-width: 2px; border-color: #4ade80; background: linear-gradient(145deg, rgba(74, 222, 128, 0.1), rgba(0,0,0,0));">
+            <a href="/industry" class="card-main">
+                <div class="icon">🚀</div>
+                <h2 style="color: #4ade80;">Industry Mastery</h2>
+                <p>Professional Standards & Best Practices.</p>
+            </a>
+            <a href="/industry" class="learn-link" style="color: #4ade80; border-color: #4ade80;">✨ Level Up to Pro</a>
+        </div>
+
+        <div class="card">
+            <a href="/bank" class="card-main">
+                <div class="icon">🏦</div>
+                <h2>CodeAura Bank</h2>
+                <p>Secure banking simulation.</p>
+            </a>
+            <a href="/learn/bank" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+        <a href="/store" class="card" style="border-color: #f59e0b;">
+            <div class="icon">🛒</div>
+            <h2>Mini Store</h2>
+            <p>Shop & Cart system.</p>
+        </a>
+        <a href="/tracker" class="card">
+            <div class="icon">💰</div>
+            <h2>Expense Tracker</h2>
+            <p>Financial management.</p>
+        </a>
+        <a href="/password" class="card">
+            <div class="icon">🔒</div>
+            <h2>Security Gen</h2>
+            <p>Cryptography basics.</p>
+        </a>
+        <div class="card">
+            <a href="/quiz" class="card-main">
+                <div class="icon">📝</div>
+                <h2>Quiz Portal</h2>
+                <p>Automated Exam system.</p>
+            </a>
+            <a href="/learn/quiz" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+        <a href="/chat" class="card" style="border-color: #4f46e5;">
+            <div class="icon">💬</div>
+            <h2>Global Chat</h2>
+            <p>Real-time messaging.</p>
+        </a>
+        <a href="/portfolio" class="card" style="border-color: #ec4899;">
+            <div class="icon">👤</div>
+            <h2>Portfolio Pro</h2>
+            <p>Web presence builder.</p>
+        </a>
+
+        <!-- 2. AI/ML SMART LABS -->
+        <div class="category-header">
+            <h2 style="color: var(--accent-pink);">🤖 AI/ML Smart Laboratories</h2>
+        </div>
+
+        <div class="card" style="border-color: var(--accent-pink);">
+            <a href="/aiml/sentiment" class="card-main">
+                <div class="icon">🧠</div>
+                <h2>Sentiment AI</h2>
+                <p>Natural Language Processing.</p>
+            </a>
+            <a href="/learn/sentiment" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+        <div class="card" style="border-color: #3b82f6;">
+            <a href="/aiml/predictor" class="card-main">
+                <div class="icon">📈</div>
+                <h2>Grade Predictor</h2>
+                <p>Linear Regression Lab.</p>
+            </a>
+            <a href="/learn/predictor" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+        <div class="card" style="border-color: #ef4444;">
+            <a href="/aiml/spam" class="card-main">
+                <div class="icon">🛑</div>
+                <h2>Spam Detector</h2>
+                <p>Naive Bayes Classification.</p>
+            </a>
+            <a href="/learn/spam" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+        <div class="card" style="border-color: #8b5cf6;">
+            <a href="/aiml/digit" class="card-main">
+                <div class="icon">✍️</div>
+                <h2>Digit Recognizer</h2>
+                <p>Neural Network Visualizer.</p>
+            </a>
+            <a href="/learn/digit" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+
+        <!-- 3. WEB3 & BLOCKCHAIN -->
+        <div class="category-header">
+            <h2 style="color: #00ff88;">⛓️ Web3 & Decentralized Systems</h2>
+        </div>
+
+        <div class="card" style="border-color: #00ff88;">
+            <a href="/blockchain" class="card-main">
+                <div class="icon">⛓️</div>
+                <h2>Blockchain Sim</h2>
+                <p>Peer-to-Peer Ledger lab.</p>
+            </a>
+            <a href="/learn/blockchain" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+        <div class="card" style="border-color: #38bdf8;">
+            <a href="/cryptopulse" class="card-main">
+                <div class="icon">⚡</div>
+                <h2>CryptoPulse</h2>
+                <p>Real-time Web3 Tracker.</p>
+            </a>
+            <a href="/learn/cryptopulse" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+
+        <!-- 4. GAME ENGINES -->
+        <div class="category-header">
+            <h2 style="color: var(--accent-green);">🎮 Interactive Game Development</h2>
+        </div>
+
+        <div class="card">
+            <a href="/tictactoe" class="card-main">
+                <div class="icon">❌⭕</div>
+                <h2>Tic Tac Toe</h2>
+                <p>Board game logic.</p>
+            </a>
+            <a href="/learn/tictactoe" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+        <div class="card snake">
+            <a href="javascript:void(0)" class="card-main" onclick="launchGame('snake')">
+                <div class="icon">🐍</div>
+                <h2>Snake Engine</h2>
+                <p>Desktop movement logic.</p>
+            </a>
+            <a href="/learn/snake" class="learn-link">📖 Learn Roadmap</a>
+        </div>
+        <div class="card hanoi">
+            <a href="javascript:void(0)" class="card-main" onclick="launchGame('hanoi')">
+                <div class="icon">🗼</div>
+                <h2>Tower of Hanoi</h2>
+                <p>Recursive puzzles.</p>
+            </a>
+            <a href="/" class="learn-link">Coming Soon...</a>
+        </div>
+    </div>
+
+    <script>
+        function launchGame(game) {
+            fetch('/launch/' + game)
+                .then(response => response.text())
+                .then(text => alert(text))
+                .catch(err => alert("Error launching game"));
+        }
+    </script>
+</body>
+
+</html>

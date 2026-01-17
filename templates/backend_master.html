@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Class | Professional Developer Training</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=Fira+Code&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0f1a;
+            --surface: #13192a;
+            --accent: #38bdf8;
+            --success: #10b981;
+            --text: #e2e8f0;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 40px 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .proj-nav {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .proj-nav:hover {
+            border-color: var(--accent);
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 60px 80px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .intro {
+            margin-bottom: 60px;
+        }
+
+        .intro h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .module {
+            margin-bottom: 80px;
+            position: relative;
+            padding-left: 40px;
+            border-left: 2px dashed var(--border);
+        }
+
+        .module-icon {
+            position: absolute;
+            left: -20px;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+
+        .module-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            background: var(--accent);
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .module h2 {
+            font-size: 1.8rem;
+            margin: 0 0 15px 0;
+            color: white;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            color: #94a3b8;
+        }
+
+        .info-box strong {
+            color: white;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        pre {
+            background: #05070a;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            font-family: 'Fira Code', monospace;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin: 0;
+            overflow-x: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        code span.comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        code span.keyword {
+            color: #569cd6;
+        }
+
+        code span.string {
+            color: #ce9178;
+        }
+
+        .final-hero {
+            background: linear-gradient(135deg, #075985 0%, #0c4a6e 100%);
+            padding: 60px;
+            border-radius: 32px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 100px;
+        }
+
+        .btn-launch {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 18px 50px;
+            background: white;
+            color: #075985;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        .btn-launch:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: #f8fafc;
+        }
+
+        .back-link {
+            color: #64748b;
+            text-decoration: none;
+            margin-bottom: 30px;
+            display: inline-block;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo">🚀 DevAcademy</div>
+        <h3 style="font-size: 0.8rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px;">Current Track</h3>
+        {% for id, p in projects.items() %}
+        <div class="proj-nav">
+            <h4 style="margin: 0;">{{ p.title }}</h4>
+            <p style="margin: 5px 0 0; font-size: 0.8rem; opacity: 0.6;">{{ p.logic_title }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="main-content">
+        <a href="/" class="back-link">← Return to Portal</a>
+
+        {% for id, p in projects.items() %}
+        <div class="intro">
+            <h1>{{ p.title }}</h1>
+            <p style="font-size: 1.3rem; color: #94a3b8; margin-top: 15px; max-width: 800px;">{{ p.desc }}</p>
+        </div>
+
+        {% for module in p.chapters %}
+        <div class="module">
+            <div class="module-icon">{{ module.icon }}</div>
+            <span class="module-badge">MODULE {{ loop.index0 }}</span>
+            <h2>{{ module.title }}</h2>
+            <div class="info-box">
+                {{ module.content | safe }}
+            </div>
+
+            {% if module.code %}
+            <pre><code>{{ module.code }}</code></pre>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="final-hero">
+            <h2 style="font-size: 2.5rem; margin: 0;">🎯 Mastery Achieved!</h2>
+            <p style="font-size: 1.2rem; opacity: 0.8; margin-top: 10px;">Aapne CodeAura Bank ka pura architecture aur
+                backend logic samajh liya hai.</p>
+            <a href="{{ p.final_project_url }}" class="btn-launch">{{ p.final_project_name }}</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        // Simple Syntax Highlighting for the tutorial
+        window.onload = () => {
+            document.querySelectorAll('code').forEach(block => {
+                let html = block.innerHTML;
+                html = html.replace(/(#.*)/g, '<span class="comment">$1</span>');
+                html = html.replace(/\b(class|def|import|from|self|if|elif|else|return|while|with|as)\b/g, '<span class="keyword">$1</span>');
+                html = html.replace(/'(.*?)'/g, '<span class="string">\'$1\'</span>');
+                html = html.replace(/"(.*?)"/g, '<span class="string">"$1"</span>');
+                block.innerHTML = html;
+            });
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker | Advanced Python</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-color: #f0fdf4;
+            --card-bg: #ffffff;
+            --primary: #10b981;
+            --secondary: #34d399;
+            --dark: #064e3b;
+            --text-gray: #64748b;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin: 0;
+            background: linear-gradient(to right, #059669, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-back {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            padding: 8px 16px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+
+        .btn-back:hover {
+            background: #cbd5e1;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-add {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .btn-add:hover {
+            background: #059669;
+        }
+
+        .total-card {
+            background: #059669;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .total-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .total-label {
+            opacity: 0.8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        td {
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.95rem;
+        }
+
+        .amount-col {
+            font-weight: 600;
+            color: #ef4444;
+        }
+
+        /* Red for expense */
+
+        .cat-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        /* Chart container */
+        .chart-box {
+            position: relative;
+            height: 250px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <h1>My Expenses</h1>
+            <a href="/" class="btn-back">Exit</a>
+        </header>
+
+        <div class="dashboard">
+            <!-- Left Column: Add Form & Total -->
+            <div>
+                <div class="card total-card">
+                    <div class="total-label">Total Spent</div>
+                    <div class="total-amount" id="displayTotal">$0.00</div>
+                </div>
+
+                <div class="card">
+                    <h3>Add New Expense</h3>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="number" id="amt" placeholder="0.00" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="cat">
+                            <option value="Food">🍔 Food</option>
+                            <option value="Travel">🚗 Travel</option>
+                            <option value="Shopping">🛍️ Shopping</option>
+                            <option value="Bills">🧾 Bills</option>
+                            <option value="Entertainment">🎬 Entertainment</option>
+                            <option value="Other">📦 Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" id="desc" placeholder="e.g. Lunch at McD">
+                    </div>
+                    <button class="btn-add" onclick="addExpense()">+ Add Expense</button>
+                </div>
+
+                <div class="card" style="margin-top: 20px;">
+                    <h3>Spending Breakdown</h3>
+                    <div class="chart-box">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Recent Transactions -->
+            <div class="card">
+                <h3>Recent Transactions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="txList">
+                        <!-- JS will populate this -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let myChart = null;
+
+        async function loadData() {
+            const response = await fetch('/api/tracker/data');
+            const data = await response.json();
+
+            // Update Total
+            document.getElementById('displayTotal').textContent = '₹' + data.summary.total.toFixed(2);
+
+            // Update Table
+            const list = document.getElementById('txList');
+            list.innerHTML = '';
+            data.expenses.forEach(tx => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                <td style="color:#aaa; font-size:0.8rem;">${tx.Date.split(' ')[0]}</td>
+                <td><span class="cat-tag">${tx.Category}</span></td>
+                <td>${tx.Description}</td>
+                <td class="amount-col">-₹${parseFloat(tx.Amount).toFixed(2)}</td>
+            `;
+                list.appendChild(tr);
+            });
+
+            // Update Chart
+            updateChart(data.summary.breakdown);
+        }
+
+        async function addExpense() {
+            const amt = document.getElementById('amt').value;
+            const cat = document.getElementById('cat').value;
+            const desc = document.getElementById('desc').value;
+
+            if (!amt) return alert("Please enter amount");
+
+            await fetch('/api/tracker/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: amt, category: cat, description: desc })
+            });
+
+            // Clear and Reload
+            document.getElementById('amt').value = '';
+            document.getElementById('desc').value = '';
+            loadData();
+        }
+
+        function updateChart(breakdown) {
+            const ctx = document.getElementById('expenseChart').getContext('2d');
+            const labels = Object.keys(breakdown);
+            const data = Object.values(breakdown);
+            const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#64748b'];
+
+            if (myChart) myChart.destroy();
+
+            myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right' }
+                    }
+                }
+            });
+        }
+
+        // Initial Load
+        loadData();
+    </script>
+
+</body>
+
+</html>

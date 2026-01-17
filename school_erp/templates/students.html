@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center;">
+    <h1>Student Management</h1>
+    <button onclick="document.getElementById('addModal').style.display='block'" class="btn">
+        + Add New Student
+    </button>
+</div>
+
+<!-- Modal -->
+<div id="addModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+    <div style="background:white; padding:30px; width:400px; margin:100px auto; border-radius:10px;">
+        <h2>Enroll Student</h2>
+        <form action="/students/add" method="POST">
+            <label>Student Name</label>
+            <input type="text" name="name" required placeholder="Full Name">
+
+            <label>Grade / Class</label>
+            <input type="text" name="grade" required placeholder="e.g. 10th A">
+
+            <label>Contact Number</label>
+            <input type="text" name="contact" required placeholder="Parent's Phone">
+
+            <button type="submit" class="btn">Save Student</button>
+            <button type="button" onclick="document.getElementById('addModal').style.display='none'" class="btn"
+                style="background:#7f8c8d;">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Class</th>
+                <th>Contact</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in students %}
+            <tr>
+                <td>#{{ s.id }}</td>
+                <td><strong>{{ s.name }}</strong></td>
+                <td>{{ s.class }}</td>
+                <td>{{ s.contact }}</td>
+                <td>
+                    <span style="color: {{ 'green' if s.fees_paid else 'red' }}">
+                        {{ 'Paid' if s.fees_paid else 'Pending' }}
+                    </span>
+                </td>
+                <td>
+                    <a href="/students/delete/{{ s.id }}" class="btn btn-danger"
+                        onclick="return confirm('Are you sure?')">Delete</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align:center; padding:20px; color:#999;">No students found. Add one!</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

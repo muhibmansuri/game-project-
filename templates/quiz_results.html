@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results (Admin)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f6f9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .btn-home {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/" class="btn-home">← Back to Home</a>
+        <h1>Student Results</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Name</th>
+                    <th>Roll No.</th>
+                    <th>Score</th>
+                    <th>Total</th>
+                    <th>Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr>
+                    <td>{{ row['Timestamp'] }}</td>
+                    <td>{{ row['Name'] }}</td>
+                    <td>{{ row['Roll Number'] }}</td>
+                    <td>{{ row['Score'] }}</td>
+                    <td>{{ row['Total'] }}</td>
+                    <td>{{ row['Percentage'] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align:center;">No results found yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

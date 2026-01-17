@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoPulse | Real-Time Web3 Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --accent-primary: #38bdf8;
+            --accent-success: #4ade80;
+            --accent-danger: #f87171;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 20%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--accent-success);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+            }
+        }
+
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .crypto-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 24px;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .crypto-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .coin-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .coin-symbol {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-primary);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+
+        .coin-name {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .price-display {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .change-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .change-up {
+            background: rgba(74, 222, 128, 0.1);
+            color: var(--accent-success);
+        }
+
+        .change-down {
+            background: rgba(248, 113, 113, 0.1);
+            color: var(--accent-danger);
+        }
+
+        .chart-container {
+            height: 120px;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--text-main);
+        }
+
+        /* Dashboard Overview */
+        .market-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-mini-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/" class="back-btn">← Back to Portal</a>
+
+        <header>
+            <div class="logo">
+                <span>⚡</span>
+                <span>CryptoPulse AI</span>
+            </div>
+            <div class="live-indicator">
+                <div class="pulse-dot"></div>
+                Live Market Feed
+            </div>
+        </header>
+
+        <div class="market-metrics">
+            <div class="metric-mini-card">
+                <div class="metric-label">Global Market Cap</div>
+                <div class="metric-value">$2.45T</div>
+            </div>
+            <div class="metric-mini-card">
+                <div class="metric-label">24h Vol</div>
+                <div class="metric-value">$84.2B</div>
+            </div>
+            <div class="metric-mini-card">
+                <div class="metric-label">BTC Dominance</div>
+                <div class="metric-value">52.4%</div>
+            </div>
+            <div class="metric-mini-card">
+                <div class="metric-label">Fear & Greed</div>
+                <div class="metric-value" style="color: #4ade80;">74 (Greed)</div>
+            </div>
+        </div>
+
+        <div class="market-grid" id="market-grid">
+            <!-- Cards will be injected by JS -->
+        </div>
+    </div>
+
+    <script>
+        const charts = {};
+
+        function createChart(canvasId, history, color) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            return new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: history.map((_, i) => i),
+                    datasets: [{
+                        data: history,
+                        borderColor: color,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: color + '10'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    }
+                }
+            });
+        }
+
+        async function updateMarket() {
+            try {
+                const response = await fetch('/api/crypto/market');
+                const data = await response.json();
+
+                const grid = document.getElementById('market-grid');
+
+                data.forEach(coin => {
+                    let card = document.getElementById(`card-${coin.symbol}`);
+                    const color = coin.change >= 0 ? '#4ade80' : '#f87171';
+
+                    if (!card) {
+                        card = document.createElement('div');
+                        card.id = `card-${coin.symbol}`;
+                        card.className = 'crypto-card';
+                        grid.appendChild(card);
+                    }
+
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <div class="coin-info">
+                                <span class="coin-symbol">${coin.symbol}</span>
+                                <span class="coin-name">${coin.name}</span>
+                            </div>
+                            <div class="change-badge ${coin.change >= 0 ? 'change-up' : 'change-down'}">
+                                ${coin.change >= 0 ? '▲' : '▼'} ${Math.abs(coin.change)}%
+                            </div>
+                        </div>
+                        <div class="price-display">$${coin.price}</div>
+                        <div class="chart-container">
+                            <canvas id="chart-${coin.symbol}"></canvas>
+                        </div>
+                    `;
+
+                    // Update or create chart
+                    if (charts[coin.symbol]) {
+                        charts[coin.symbol].data.datasets[0].data = coin.history;
+                        charts[coin.symbol].data.datasets[0].borderColor = color;
+                        charts[coin.symbol].update('none');
+                    } else {
+                        charts[coin.symbol] = createChart(`chart-${coin.symbol}`, coin.history, color);
+                    }
+                });
+            } catch (err) {
+                console.error("Failed to fetch market data", err);
+            }
+        }
+
+        // Initial load
+        updateMarket();
+        // Dynamic updates every 2 seconds
+        setInterval(updateMarket, 2000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center;">
+    <h1>Teacher & Staff</h1>
+    <button onclick="document.getElementById('addModal').style.display='block'" class="btn" style="background:#2ecc71;">
+        + Add Faculty
+    </button>
+</div>
+
+<!-- Modal -->
+<div id="addModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+    <div style="background:white; padding:30px; width:400px; margin:100px auto; border-radius:10px;">
+        <h2>Add Faculty Member</h2>
+        <form action="/teachers/add" method="POST">
+            <label>Full Name</label>
+            <input type="text" name="name" required>
+
+            <label>Subject / Role</label>
+            <input type="text" name="subject" required placeholder="e.g. Mathematics">
+
+            <label>Monthly Salary</label>
+            <input type="number" name="salary" required placeholder="50000">
+
+            <button type="submit" class="btn">Save Faculty</button>
+            <button type="button" onclick="document.getElementById('addModal').style.display='none'" class="btn"
+                style="background:#7f8c8d;">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<div class="card">
+    <div class="stats-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));">
+        {% for t in teachers %}
+        <div style="background:white; border:1px solid #eee; border-radius:8px; padding:20px; text-align:center;">
+            <div style="font-size:3rem; margin-bottom:10px;">👨‍🏫</div>
+            <h3 style="margin:0;">{{ t.name }}</h3>
+            <p style="color:#7f8c8d; margin:5px 0;">{{ t.subject }}</p>
+            <div
+                style="background:#f4f7f6; display:inline-block; padding:5px 10px; border-radius:15px; font-size:0.9rem; margin-top:10px;">
+                ID: {{ t.id }} | Salary: ₹{{ t.salary }}
+            </div>
+        </div>
+        {% else %}
+        <p style="grid-column: 1/-1; text-align:center; color:#999;">No teachers added yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

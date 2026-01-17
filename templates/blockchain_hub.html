@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Mastery | 10 Automated Projects</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050505;
+            --primary: #00ff88;
+            --secondary: #6366f1;
+            --card: #111;
+            --text: #e2e8f0;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 320px;
+            height: 100vh;
+            background: #0a0a0a;
+            border-right: 1px solid #222;
+            padding: 20px;
+            position: fixed;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid #222;
+        }
+
+        .nav-item:hover {
+            background: #1a1a1a;
+            border-color: #444;
+        }
+
+        .nav-item.active {
+            background: rgba(0, 255, 136, 0.05);
+            color: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+        }
+
+        .nav-item small {
+            display: block;
+            color: #666;
+            margin-top: 4px;
+            font-size: 0.75rem;
+        }
+
+        .main-content {
+            margin-left: 320px;
+            padding: 60px;
+            width: calc(100% - 320px);
+            min-height: 100vh;
+        }
+
+        .lab-card {
+            background: var(--card);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid #222;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 2.2rem;
+            color: var(--primary);
+        }
+
+        .label {
+            color: #888;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .lab-ui {
+            margin-top: 30px;
+            background: #000;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #222;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 10px;
+            font-family: inherit;
+        }
+
+        button {
+            background: var(--primary);
+            color: black;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.2);
+        }
+
+        .result-box {
+            background: #0a0a0a;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #222;
+            margin-top: 20px;
+            display: none;
+            word-break: break-all;
+            font-family: monospace;
+            position: relative;
+        }
+
+        .result-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+        }
+
+        .back-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+
+        .back-link:hover {
+            color: white;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tag-logic {
+            background: var(--secondary);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/" class="back-link">← Return to Portal Hub</a>
+
+    <div class="sidebar">
+        <h2>Roadmap to AuraCoin</h2>
+        <div id="nav-list"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="lab-card" id="lab-container">
+            <!-- Content Injected -->
+        </div>
+    </div>
+
+    <script>
+        const projects = [
+            { id: 1, title: "1. Hash Machine", desc: "Digital Fingerprint Lab" },
+            { id: 2, title: "2. Immutable Block", desc: "Data Encapsulation Basics" },
+            { id: 3, title: "3. The Chain Linker", desc: "Connecting Blocks via Hashes" },
+            { id: 4, title: "4. Proof-of-Work", desc: "The Mining Difficulty Lab" },
+            { id: 5, title: "5. Mempool Manager", desc: "Transaction Waiting Room" },
+            { id: 6, title: "6. Digital Wallet", desc: "Key Generation System" },
+            { id: 7, title: "7. Signature Auth", desc: "Private Key Security" },
+            { id: 8, title: "8. Reward Engine", desc: "Economic Incentives" },
+            { id: 9, title: "9. Ledger Explorer", desc: "Transaction Transparency" },
+            { id: 10, title: "10. AuraCoin Core", desc: "Global Digital Currency" }
+        ];
+
+        let currentProject = 1;
+
+        function renderSidebar() {
+            const list = document.getElementById('nav-list');
+            list.innerHTML = '';
+            projects.forEach(p => {
+                const div = document.createElement('div');
+                div.className = `nav-item ${p.id === currentProject ? 'active' : ''}`;
+                div.innerHTML = `<strong>${p.title}</strong><small>${p.desc}</small>`;
+                div.onclick = () => { currentProject = p.id; renderLab(); };
+                list.appendChild(div);
+            });
+        }
+
+        function renderLab() {
+            renderSidebar();
+            const container = document.getElementById('lab-container');
+            const p = projects.find(x => x.id === currentProject);
+
+            container.innerHTML = `
+            <span class="tag tag-logic">STEP #${p.id}</span>
+            <h1>${p.title}</h1>
+            <p style="color:#aaa">${p.desc}</p>
+            <div class="lab-ui" id="lab-ui-content"></div>
+            <div id="loading" style="display:none; text-align:center; margin-top:20px;">⚡ Processing Automation...</div>
+            <div class="result-box" id="global-result"></div>
+        `;
+
+            setupUI();
+        }
+
+        function setupUI() {
+            const ui = document.getElementById('lab-ui-content');
+
+            switch (currentProject) {
+                case 1:
+                    ui.innerHTML = `<label class="label">Input Data (String)</label><textarea id="p1-input" placeholder="Type data..."></textarea><button onclick="doAction('/api/blockchain_lab/hash', 'p1-input')">Generate Hash</button>`;
+                    break;
+                case 2:
+                    ui.innerHTML = `<label class="label">Transaction Data</label><input type="text" id="p2-input" placeholder="e.g. Alice -> Bob: 5 Aura"><button onclick="doAction('/api/blockchain_lab/block', 'p2-input')">Create Block</button>`;
+                    break;
+                case 3:
+                    ui.innerHTML = `<button onclick="doAction('/api/blockchain_lab/chain_status')">View Current Chain Structure</button>`;
+                    break;
+                case 4:
+                    ui.innerHTML = `<label class="label">Difficulty Level</label><select id="p4-diff"><option value="1">1 (Easy)</option><option value="2">2 (Normal)</option><option value="3">3 (Hard)</option></select><button onclick="doAction('/api/blockchain_lab/mine_demo', 'p4-diff')">Start Proof-of-Work Mining</button>`;
+                    break;
+                case 5:
+                    ui.innerHTML = `<label class="label">Queue Transaction</label><input id="p5-tx" placeholder="Enter data..."><button onclick="doAction('/api/blockchain_lab/mempool_add', 'p5-tx')">Add to Mempool</button>`;
+                    break;
+                case 6:
+                    ui.innerHTML = `<p>Generate unique Private/Public key pairs.</p><button onclick="doAction('/api/blockchain_lab/wallet')">Create New Wallet</button>`;
+                    break;
+                case 7:
+                    ui.innerHTML = `<label class="label">Private Key</label><input id="p7-key" placeholder="Paste your private key..."><label class="label">Message</label><input id="p7-msg" placeholder="Transaction details..."><button onclick="doAction('/api/blockchain_lab/sign', ['p7-key', 'p7-msg'])">Sign Data</button>`;
+                    break;
+                case 8:
+                    ui.innerHTML = `<label class="label">Miner Address</label><input id="p8-addr" placeholder="0x..."><button onclick="doAction('/api/blockchain_lab/mine_final', 'p8-addr')">Mine & Collect Reward</button>`;
+                    break;
+                case 9:
+                    ui.innerHTML = `<label class="label">Wallet Address</label><input id="p9-addr" placeholder="0x..."><button onclick="doAction('/api/blockchain_lab/balance', 'p9-addr')">Get History & Balance</button>`;
+                    break;
+                case 10:
+                    ui.innerHTML = `<h3>Digital Economy Dashboard</h3><button onclick="doAction('/api/blockchain_lab/full_status')">Download Ledger Snapshot</button>`;
+                    break;
+            }
+        }
+
+        async function doAction(endpoint, inputId) {
+            const resBox = document.getElementById('global-result');
+            const loading = document.getElementById('loading');
+            resBox.style.display = 'none';
+            loading.style.display = 'block';
+
+            let body = {};
+            if (Array.isArray(inputId)) {
+                inputId.forEach(id => body[id.replace('p' + currentProject + '-', '')] = document.getElementById(id).value);
+            } else if (inputId) {
+                body[inputId.replace('p' + currentProject + '-', '')] = document.getElementById(inputId).value;
+            }
+
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+
+            loading.style.display = 'none';
+            resBox.style.display = 'block';
+            resBox.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+
+        renderLab();
+    </script>
+
+</body>
+
+</html>
