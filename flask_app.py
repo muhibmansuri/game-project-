@@ -1,15 +1,25 @@
-from flask import Flask, render_template, jsonify, request
-from game.game import TicTacToe, RandomComputerPlayer
-from game.hangman import Hangman
-from quiz.data import get_quiz_data, check_score
-from quiz.storage import save_result, get_all_results
-import tracker.manager as tracker_mgr
-import chat.manager as chat_mgr
-import store.manager as store_mgr
 import os
 import threading
 import sys
 import subprocess
+
+# Add projects directory to sys.path so modules can be imported directly
+sys.path.append(os.path.join(os.path.dirname(__file__), 'projects'))
+
+from flask import Flask, render_template, jsonify, request, redirect, send_file
+
+from game.game import TicTacToe, RandomComputerPlayer
+from game.hangman import Hangman
+from quiz.data import get_quiz_data, check_score
+from quiz.storage import save_result, get_all_results
+from quiz.exam_data import get_exam_questions, evaluate_exam
+from quiz.exam_data import get_exam_questions, evaluate_exam
+from quiz.pdf_generator import generate_exam_pdf
+from web_tools.code_runner import execute_python_code
+
+import tracker.manager as tracker_mgr
+import chat.manager as chat_mgr
+import store.manager as store_mgr
 from crypto.manager import crypto_mgr
 from weather.manager import weather_mgr
 from cinema.manager import cinema_mgr
@@ -34,14 +44,14 @@ def init_hangman():
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('main/home.html')
 
 # --- Tic Tac Toe Routes ---
 @app.route('/tictactoe')
 def tictactoe_page():
     if tictactoe_game is None:
         init_tictactoe()
-    return render_template('tictactoe.html')
+    return render_template('games/tictactoe.html')
 
 @app.route('/api/tictactoe/move', methods=['POST'])
 def tictactoe_move():
@@ -88,7 +98,7 @@ def tictactoe_reset():
 def hangman_page():
     if hangman_game is None:
         init_hangman()
-    return render_template('hangman.html')
+    return render_template('games/hangman.html')
 
 @app.route('/api/hangman/guess', methods=['POST'])
 def hangman_guess():
@@ -125,7 +135,7 @@ def hangman_status():
 def launch_snake():
     # Run in a separate thread/process so it doesn't block Flask
     def run_game():
-        subprocess.run([sys.executable, 'game/snake.py'])
+        subprocess.run([sys.executable, 'projects/game/snake.py'])
     
     threading.Thread(target=run_game).start()
     return "Snake launched! Check your taskbar."
@@ -133,7 +143,7 @@ def launch_snake():
 @app.route('/launch/hanoi')
 def launch_hanoi():
     def run_game():
-        subprocess.run([sys.executable, 'game/hanoi.py'])
+        subprocess.run([sys.executable, 'projects/game/hanoi.py'])
     
     threading.Thread(target=run_game).start()
     return "Tower of Hanoi launched! Check your taskbar."
@@ -141,7 +151,7 @@ def launch_hanoi():
 @app.route('/launch/flappy')
 def launch_flappy():
     def run_game():
-        subprocess.run([sys.executable, 'game/flappy.py'])
+        subprocess.run([sys.executable, 'projects/game/flappy.py'])
     
     threading.Thread(target=run_game).start()
     return "Flappy Bird launched! Check your taskbar."
@@ -149,7 +159,7 @@ def launch_flappy():
 @app.route('/launch/pong')
 def launch_pong():
     def run_game():
-        subprocess.run([sys.executable, 'game/pong.py'])
+        subprocess.run([sys.executable, 'projects/game/pong.py'])
     
     threading.Thread(target=run_game).start()
     return "Ping Pong launched! Check your taskbar."
@@ -157,16 +167,13 @@ def launch_pong():
 # --- Password Generator Routes ---
 @app.route('/password')
 def password_page():
-    return render_template('password.html')
+    return render_template('web_tools/password.html')
 
 @app.route('/api/password/generate', methods=['POST'])
 def generate_password_api():
     try:
         from game.autopw import generate_password
     except ImportError:
-        # Fallback if file isn't found in game/
-        # This handles the case if user only has it in templates/python student project/
-        # But we made sure to copy it to game/autopw.py
         return jsonify({'error': 'Backend module not found'}), 500
 
     data = request.json
@@ -186,7 +193,7 @@ def generate_password_api():
 # --- Bank System Routes ---
 @app.route('/bank')
 def bank_page():
-    return render_template('bank.html')
+    return render_template('finance/bank.html')
 
 @app.route('/api/bank/register', methods=['POST'])
 def bank_register():
@@ -236,14 +243,14 @@ def bank_status(acc_num):
 # --- Quiz System Routes ---
 @app.route('/quiz')
 def quiz_login():
-    return render_template('quiz_login.html')
+    return render_template('quiz/quiz_login.html')
 
 @app.route('/quiz/start_session', methods=['POST'])
 def quiz_start_session():
     name = request.form.get('name')
     roll = request.form.get('roll')
     # In a real app, we might store this in session
-    return render_template('quiz_exam.html', name=name, roll=roll)
+    return render_template('quiz/quiz_exam.html', name=name, roll=roll)
 
 @app.route('/api/quiz/data')
 def quiz_data_api():
@@ -280,12 +287,52 @@ def quiz_results_page():
     results = get_all_results()
     # Sort by latest first
     results.reverse()
-    return render_template('quiz_results.html', results=results)
+    return render_template('quiz/quiz_results.html', results=results)
+
+# --- Exam Routes (New Feature) ---
+@app.route('/exam')
+def exam_page():
+    questions = get_exam_questions()
+    return render_template('quiz/final_exam.html', questions=questions)
+
+@app.route('/api/exam/submit', methods=['POST'])
+def exam_submit_api():
+    data = request.json
+    answers = data.get('answers', {})
+    score, details = evaluate_exam(answers)
+    return jsonify({
+        'score': score,
+        'total': 40,
+        'details': details
+    })
+
+@app.route('/api/exam/pdf', methods=['POST'])
+def exam_pdf_api():
+    data = request.json
+    # data contains: name, score, total, details, time
+    path = generate_exam_pdf(
+        data.get('name', 'Student'),
+        data.get('score', 0),
+        data.get('total', 40),
+        data.get('details', []),
+        data.get('time', '00:00')
+    )
+    
+    # Return file and cleanup later (or keep it simple)
+    # Using as_attachment=True to force download
+    return send_file(path, as_attachment=True, download_name=os.path.basename(path))
+
+@app.route('/api/run_code', methods=['POST'])
+def run_code_api():
+    data = request.json
+    code = data.get('code', '')
+    result = execute_python_code(code)
+    return jsonify(result)
 
 # --- Expense Tracker Routes ---
 @app.route('/tracker')
 def tracker_page():
-    return render_template('tracker.html')
+    return render_template('finance/tracker.html')
 
 @app.route('/api/tracker/add', methods=['POST'])
 def tracker_add():
@@ -302,7 +349,7 @@ def tracker_data():
 # --- Chat Routes ---
 @app.route('/chat')
 def chat_page():
-    return render_template('chat.html')
+    return render_template('web_tools/chat.html')
 
 @app.route('/api/chat/get')
 def chat_get():
@@ -317,7 +364,7 @@ def chat_send():
 # --- Store Routes ---
 @app.route('/store')
 def store_page():
-    return render_template('store.html')
+    return render_template('web_tools/store.html')
 
 @app.route('/api/store/products')
 def store_products():
@@ -348,25 +395,25 @@ def store_checkout():
     # Get cart details to render the invoice
     cart = store_mgr.get_cart_details()
     # In a real app we'd verify not empty and save order to DB here
-    return render_template('invoice.html', cart=cart)
+    return render_template('finance/invoice.html', cart=cart)
 
 # --- Blockchain Simulation Routes ---
 @app.route('/blockchain')
 def blockchain_page():
-    return render_template('blockchain.html')
+    return render_template('blockchain/blockchain.html')
 
 @app.route('/blockchain/learn')
 def blockchain_learn():
-    return render_template('blockchain_learn.html')
+    return render_template('blockchain/blockchain_learn.html')
 
 @app.route('/portfolio')
 def portfolio_page():
-    return render_template('portfolio.html')
+    return render_template('main/portfolio.html')
 
 # --- AI/ML Smart Lab Routes ---
 @app.route('/aiml/sentiment')
 def sentiment_page():
-    return render_template('sentiment.html')
+    return render_template('ai_ml/sentiment.html')
 
 @app.route('/api/aiml/sentiment', methods=['POST'])
 def sentiment_api():
@@ -378,7 +425,7 @@ def sentiment_api():
 
 @app.route('/aiml/predictor')
 def predictor_page():
-    return render_template('predictor.html')
+    return render_template('ai_ml/predictor.html')
 
 @app.route('/api/aiml/predict', methods=['POST'])
 def predict_api():
@@ -390,7 +437,7 @@ def predict_api():
 
 @app.route('/aiml/spam')
 def spam_page():
-    return render_template('spam_detector.html')
+    return render_template('ai_ml/spam_detector.html')
 
 @app.route('/api/aiml/spam', methods=['POST'])
 def spam_api():
@@ -402,7 +449,7 @@ def spam_api():
 
 @app.route('/aiml/digit')
 def digit_page():
-    return render_template('digit_recognizer.html')
+    return render_template('ai_ml/digit_recognizer.html')
 
 @app.route('/api/aiml/digit', methods=['POST'])
 def digit_api():
@@ -414,7 +461,7 @@ def digit_api():
 
 @app.route('/aiml/house')
 def house_page():
-    return render_template('house_estimator.html')
+    return render_template('ai_ml/house_estimator.html')
 
 @app.route('/api/aiml/house', methods=['POST'])
 def house_api():
@@ -429,7 +476,7 @@ def house_api():
 
 @app.route('/aiml/fraud')
 def fraud_page():
-    return render_template('fraud_detector.html')
+    return render_template('ai_ml/fraud_detector.html')
 
 @app.route('/api/aiml/fraud', methods=['POST'])
 def fraud_api():
@@ -448,7 +495,7 @@ def learn_project(project_id):
     from aiml.roadmaps_data import roadmaps
     if project_id in roadmaps:
         data = roadmaps[project_id]
-        return render_template('learn_project.html', 
+        return render_template('ai_ml/learn_project.html', 
                                title=data['title'], 
                                subtitle=data['subtitle'],
                                english_steps=data['english']['steps'],
@@ -493,7 +540,7 @@ def mine_chain():
 # --- CryptoPulse Routes ---
 @app.route('/cryptopulse')
 def cryptopulse_page():
-    return render_template('cryptopulse.html')
+    return render_template('finance/cryptopulse.html')
 
 @app.route('/api/crypto/market')
 def crypto_market_api():
@@ -502,7 +549,7 @@ def crypto_market_api():
 # --- SkyWatch AI Routes ---
 @app.route('/skywatch')
 def skywatch_page():
-    return render_template('skywatch.html')
+    return render_template('web_tools/skywatch.html')
 
 @app.route('/api/weather/cities')
 def weather_cities_api():
@@ -516,7 +563,7 @@ def weather_data_api():
 # --- CinemAura Routes ---
 @app.route('/cinema')
 def cinema_page():
-    return render_template('cinema.html')
+    return render_template('web_tools/cinema.html')
 
 @app.route('/api/cinema/movies')
 def cinema_movies_api():
@@ -530,20 +577,20 @@ def cinema_recommend_api(movie_id):
 # --- Project Studio (Teacher Tool) ---
 @app.route('/studio')
 def studio_page():
-    return render_template('project_studio.html')
+    return render_template('web_tools/project_studio.html')
 
 @app.route('/backend_master')
 def backend_master():
     from aiml.master_class_data import master_projects
-    return render_template('backend_master.html', projects=master_projects)
+    return render_template('main/backend_master.html', projects=master_projects)
 
 @app.route('/health')
 def health_page():
-    return render_template('health.html')
+    return render_template('main/health.html')
 
 @app.route('/industry')
 def industry_mastery():
-    return render_template('industry_mastery.html', standards=industry_guide.get_all_standards())
+    return render_template('web_tools/industry_mastery.html', standards=industry_guide.get_all_standards())
 
 
 if __name__ == '__main__':
